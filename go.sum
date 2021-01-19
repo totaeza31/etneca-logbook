@@ -1,0 +1,4 @@
+github.com/faygun/go-rest-api v0.0.0-20201007174148-dea8c4d92510 h1:zxeu51B68ILIzT8tt1uHwp/EEwNJzIdBID3PA4s2UqM=
+github.com/faygun/go-rest-api v0.0.0-20201007174148-dea8c4d92510/go.mod h1:hFd3aCShqk14x9f83m0e/9+8/WTeBEz4KDR7gostUtA=
+github.com/gorilla/mux v1.8.0 h1:i40aqfkR1h2SlN9hojwV5ZA91wcXFOvkdNIeFDP5koI=
+github.com/gorilla/mux v1.8.0/go.mod h1:DVbg23sWSpFRCP0SfiEN6jmj59UnW/n46BH5rLB71So=
