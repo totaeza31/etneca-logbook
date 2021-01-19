@@ -20,5 +20,5 @@ func Profile(response http.ResponseWriter, request *http.Request) {
 		json.NewEncoder(response).Encode(user)
 	}
 
-	// json.NewEncoder(response).Encode(user)
+	json.NewEncoder(response).Encode(user)
 }
