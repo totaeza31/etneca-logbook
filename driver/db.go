@@ -5,6 +5,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/go-redis/redis"
 	"github.com/subosito/gotenv"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -30,4 +31,15 @@ func ConnectMongo() (*mongo.Collection, error) {
 	client.ListDatabaseNames(ctx, bson.M{})
 
 	return collection, nil
+}
+
+func ConnectRedis() (*redis.Client, error) {
+
+	addr := os.Getenv("ADDR_REDIS")
+	opt, err := redis.ParseURL(addr)
+	if err != nil {
+		return nil, err
+	}
+	client := redis.NewClient(opt)
+	return client, nil
 }

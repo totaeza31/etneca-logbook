@@ -1,6 +1,10 @@
 package models
 
-import "go.mongodb.org/mongo-driver/bson/primitive"
+import (
+	"time"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
+)
 
 type Message struct {
 	Message string "success"
@@ -12,39 +16,40 @@ type User struct {
 	FirstName   firstName          `bson:"firstname"`
 	LastName    lastName           `bson:"lastname"`
 	Address     address            `bson:"address"`
-	Brithday    primitive.DateTime `json:"brithday,omitempty" bson:"brithday,omitempty"`
-	Fax         string             `json:"fax,omitempty" bson:"fax,omitempty"`
-	Email       string             `json:"email,omitempty" bson:"email,omitempty"`
-	Tel         string             `json:"telephone,omitempty" bson:"telephone,omitempty"`
-	NamePost    namePost           `bson:"namePost"`
-	AddressPost addressPost        `bson:"addressPost"`
-	Picture     string             `json:"picture,omitempty" bson:"picture,omitempty"`
+	Brithday    time.Time
+	Fax         string
+	Email       string
+	Password    string
+	Tel         string
+	NamePost    namePost    `bson:"namePost"`
+	AddressPost addressPost `bson:"addressPost"`
+	Picture     string
 }
 
 type firstName struct {
-	Th string `json:"th,omitempty" bson:"th,omitempty"`
-	En string ""
-	Bu string ""
+	Th string
+	En string
+	Bu string
 }
 
 type lastName struct {
-	Th string `json:"th,omitempty" bson:"th,omitempty"`
-	En string `json:"en,omitempty" bson:"en,omitempty"`
-	Bu string `json:"bu,omitempty" bson:"bu,omitempty"`
+	Th string
+	En string
+	Bu string
 }
 type address struct {
-	Th string `json:"th,omitempty" bson:"th,omitempty"`
-	En string `json:"en,omitempty" bson:"en,omitempty"`
-	Bu string `json:"bu,omitempty" bson:"bu,omitempty"`
+	Th string
+	En string
+	Bu string
 }
 
 type namePost struct {
-	Th string `json:"th,omitempty" bson:"th,omitempty"`
-	En string `json:"en,omitempty" bson:"en,omitempty"`
-	Bu string `json:"bu,omitempty" bson:"bu,omitempty"`
+	Th string
+	En string
+	Bu string
 }
 type addressPost struct {
-	Th string `json:"th,omitempty" bson:"th,omitempty"`
-	En string `json:"en,omitempty" bson:"en,omitempty"`
-	Bu string `json:"bu,omitempty" bson:"bu,omitempty"`
+	Th string
+	En string
+	Bu string
 }
