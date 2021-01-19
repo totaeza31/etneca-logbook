@@ -3,12 +3,12 @@ package controllers
 import (
 	"encoding/json"
 	"etneca-logbook/models"
-	"etneca-logbook/utils"
 	"etneca-logbook/repository"
+	"etneca-logbook/utils"
 	"net/http"
 )
 
-func Profile(response http.ResponseWriter, request *http.Request) {
+func GetProfile(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 	var users models.User
 	json.NewDecoder(request.Body).Decode(&users)

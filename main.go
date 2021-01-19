@@ -16,6 +16,7 @@ func init() {
 func main() {
 	router := mux.NewRouter()
 	router.HandleFunc("/login", controllers.Login).Methods("POST")
-	router.HandleFunc("/profile", controllers.Profile).Methods("POST")
+	// router.HandleFunc("/profile", controllers.Profile).Methods("POST")
+	// router.HandleFunc("/profile", controllers.VerifyAccess(controllers.GetProfile)).Methods("GET")
 	http.ListenAndServe(":"+os.Getenv("PORT"), router)
 }
