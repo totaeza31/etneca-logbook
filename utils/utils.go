@@ -9,7 +9,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/dgrijalva/jwt-go"
+	jwt "github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -72,4 +72,26 @@ func GenerateToken(authen models.Authen, types string) (string, error) {
 		}
 	}
 	return tokenString, nil
+}
+
+func ValidToken(accessToken string) (*jwt.Token, error) {
+	token, err := jwt.Parse(accessToken, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("There was an Error")
+		}
+		return []byte(os.Getenv("ACCESS_TOKEN")), nil
+	})
+	return token, err
+}
+
+func ParseJson(Token string) (string, bool) {
+	var ID string
+	token, _ := jwt.Parse(Token, nil)
+	claims, err := token.Claims.(jwt.MapClaims)
+	for key, val := range claims {
+		if key == "id" {
+			ID = val.(string)
+		}
+	}
+	return ID, err
 }
