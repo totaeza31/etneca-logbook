@@ -5,6 +5,7 @@ import (
 	"etneca-logbook/models"
 	"etneca-logbook/repository"
 	"etneca-logbook/utils"
+	"fmt"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -98,4 +99,29 @@ func ResetPassword(response http.ResponseWriter, request *http.Request) {
 		utils.SentMessage(response, false, "path error")
 	}
 
+}
+
+func DeleteUser(response http.ResponseWriter, request *http.Request) {
+	response.Header().Add("content-type", "application/json")
+	param := mux.Vars(request)
+	id := param["id"]
+	err := repository.DeleteUser(id)
+	if err != nil {
+		utils.SentMessage(response, false, "Delete failed")
+	} else {
+		utils.SentMessage(response, true, "Delete success")
+	}
+}
+
+func UpdateUser(response http.ResponseWriter, request *http.Request) {
+	response.Header().Add("content-type", "application/json")
+	param := mux.Vars(request)
+	id := param["id"]
+	objID, _ := primitive.ObjectIDFromHex(id)
+	_, err := repository.FindAuthen(objID)
+	if err != nil {
+		utils.SentMessage(response, false, "this user not found")
+	} else {
+		
+	}
 }
