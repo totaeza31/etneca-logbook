@@ -22,6 +22,19 @@ func FindUser(id primitive.ObjectID) (models.User, error) {
 	return user, nil
 }
 
+func FindAuthen(id primitive.ObjectID) (models.Authen, error) {
+	var authen models.Authen
+	db, err := driver.ConnectMongo()
+	if err != nil {
+		return authen, err
+	}
+	err = db.FindOne(context.TODO(), bson.M{"_id": id}).Decode(&authen)
+	if err != nil {
+		return authen, err
+	}
+	return authen, nil
+}
+
 func FindEmail(email string) (models.Authen, error) {
 	var authen models.Authen
 	db, err := driver.ConnectMongo()

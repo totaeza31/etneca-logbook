@@ -32,12 +32,9 @@ func Decrypt(password, hash string) error {
 }
 
 func Encrypt(text string) string {
-
 	bytes, _ := bcrypt.GenerateFromPassword([]byte(text), 14)
-
 	fmt.Println(bcrypt.Cost(bytes))
 	return string(bytes)
-
 }
 
 func GenerateToken(authen models.Authen, types string) (string, error) {
@@ -74,12 +71,22 @@ func GenerateToken(authen models.Authen, types string) (string, error) {
 	return tokenString, nil
 }
 
-func ValidToken(accessToken string) (*jwt.Token, error) {
+func ValidAccessToken(accessToken string) (*jwt.Token, error) {
 	token, err := jwt.Parse(accessToken, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("There was an Error")
 		}
 		return []byte(os.Getenv("ACCESS_TOKEN")), nil
+	})
+	return token, err
+}
+
+func ValidRefreshToken(refreshToken string) (*jwt.Token, error) {
+	token, err := jwt.Parse(refreshToken, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("There was an Error")
+		}
+		return []byte(os.Getenv("REFRESH_TOKEN")), nil
 	})
 	return token, err
 }

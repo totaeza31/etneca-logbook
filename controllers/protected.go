@@ -12,19 +12,39 @@ import (
 
 func GetProfile(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
-	var accessToken = tokens.Token
+	var accessToken = token.Token
 	ID, valid := utils.ParseJson(accessToken)
 	if valid == false {
 		utils.SentMessage(response, false, "parse token failed")
 	} else {
 		objID, _ := primitive.ObjectIDFromHex(ID)
-		var user models.User
-		json.NewDecoder(request.Body).Decode(&user)
 		user, err := repository.FindUser(objID)
 		if err != nil {
 			utils.SentMessage(response, false, "user not found")
 		}
+		user.Password = ""
 		json.NewEncoder(response).Encode(user)
 	}
+}
 
+func GetNewToken(response http.ResponseWriter, request *http.Request) {
+	response.Header().Add("content-type", "application/json")
+	var authen models.Authen
+	var newToken newToken
+	var refreshToken = token.Token
+	ID, _ := utils.ParseJson(refreshToken)
+	objID, _ := primitive.ObjectIDFromHex(ID)
+	authen, err := repository.FindAuthen(objID)
+	if err != nil {
+		utils.SentMessage(response, false, "not user found")
+	} else {
+		repository.DeleteToken(authen.ID.Hex())
+		newToken.AccessToken, err = utils.GenerateToken(authen, "access")
+		newToken.RefreshToken, err = utils.GenerateToken(authen, "refresh")
+		if err != nil {
+			utils.SentMessage(response, false, "crete token error")
+		} else {
+			json.NewEncoder(response).Encode(newToken)
+		}
+	}
 }

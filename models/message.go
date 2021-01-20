@@ -19,8 +19,8 @@ type User struct {
 	Brithday    time.Time
 	Fax         string
 	Email       string
-	Password    string
-	Tel         string
+	Password    string      `json:"password,omitempty" bson:"password,omitempty"`
+	Tel         string      `json:"telephone,omitempty" bson:"telephone,omitempty"`
 	NamePost    namePost    `bson:"namePost"`
 	AddressPost addressPost `bson:"addressPost"`
 	Picture     string

@@ -7,13 +7,20 @@ import (
 	"etneca-logbook/utils"
 	"net/http"
 	"strings"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type Token struct {
 	Token string `json:"refreshToken,omitempty" bson:"refreshToken,omitempty"`
 }
 
-var tokens Token
+type newToken struct {
+	AccessToken  string `json:"accessToken,omitempty" bson:"accessToken,omitempty"`
+	RefreshToken string `json:"refreshToken,omitempty" bson:"refreshToken,omitempty"`
+}
+
+var token Token
 
 func Login(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
@@ -34,7 +41,7 @@ func Login(response http.ResponseWriter, request *http.Request) {
 			utils.SentMessage(response, false, "crete  token error")
 		}
 		json.NewEncoder(response).Encode(authen)
-		tokens.Token = authen.RefreshToken
+		token.Token = authen.RefreshToken
 	}
 }
 
@@ -44,8 +51,8 @@ func VerifyAccess(next http.HandlerFunc) http.HandlerFunc {
 		authHeader := request.Header.Get("Authorization")
 		bearerToken := strings.Split(authHeader, " ")
 		if len(bearerToken) == 2 {
-			token, _ := utils.ValidToken(bearerToken[1])
-			if token.Valid {
+			tokenValid, _ := utils.ValidAccessToken(bearerToken[1])
+			if tokenValid.Valid {
 				next.ServeHTTP(response, request)
 			} else {
 				utils.SentMessage(response, false, "invalid token")
@@ -56,4 +63,63 @@ func VerifyAccess(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 	})
+}
+
+func VarifyRefresh(next http.HandlerFunc) http.HandlerFunc {
+	return http.HandlerFunc(func(response http.ResponseWriter, request *http.Request) {
+		response.Header().Add("content-type", "application/json")
+		json.NewDecoder(request.Body).Decode(&token)
+		tokenValid, _ := utils.ValidRefreshToken(token.Token)
+		if tokenValid.Valid {
+			ID, valid := utils.ParseJson(token.Token)
+			if valid == false {
+				utils.SentMessage(response, false, "parse token failed")
+			}
+			objID, _ := primitive.ObjectIDFromHex(ID)
+			var authen models.Authen
+			authen, _ = repository.FindAuthen(objID)
+			val, err := repository.GetToken(authen.ID.Hex())
+			if val != token.Token {
+				utils.SentMessage(response, false, "old token")
+			} else {
+				if err != nil {
+					utils.SentMessage(response, false, "token not found")
+				} else {
+					next.ServeHTTP(response, request)
+				}
+			}
+		} else {
+			utils.SentMessage(response, false, "invalid token")
+			return
+		}
+	})
+}
+
+func Logout(response http.ResponseWriter, request *http.Request) {
+	response.Header().Add("content-type", "application/json")
+	json.NewDecoder(request.Body).Decode(&token)
+	tokenValid, _ := utils.ValidRefreshToken(token.Token)
+	if tokenValid.Valid {
+		ID, valid := utils.ParseJson(token.Token)
+		if valid == false {
+			utils.SentMessage(response, false, "parse token failed")
+		}
+		objID, _ := primitive.ObjectIDFromHex(ID)
+		var authen models.Authen
+		authen, _ = repository.FindAuthen(objID)
+		val, err := repository.GetToken(authen.ID.Hex())
+		if val != token.Token {
+			utils.SentMessage(response, false, "old token")
+		} else {
+			if err != nil {
+				utils.SentMessage(response, false, "token not found")
+			} else {
+				repository.DeleteToken(authen.ID.Hex())
+				utils.SentMessage(response, true, "logout success")
+			}
+		}
+	} else {
+		utils.SentMessage(response, true, "invalid token")
+		return
+	}
 }
