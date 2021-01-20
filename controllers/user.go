@@ -29,33 +29,35 @@ var token Token
 func Login(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 	var authen models.Authen
-	json.NewDecoder(request.Body).Decode(&authen)
-	var password = authen.Password
-	authen, err := repository.FindEmail(authen.Email)
+	err := json.NewDecoder(request.Body).Decode(&authen)
 	if err != nil {
-		utils.SentMessage(response, false, "user not found")
-	}
-	err = utils.Decrypt(password, authen.Password)
-	if err != nil {
-		utils.SentMessage(response, false, "invalid password")
+		utils.SentMessage(response, false, "invalid syntax")
 	} else {
-		authen.AccessToken, err = utils.GenerateToken(authen, "access")
-		authen.RefreshToken, err = utils.GenerateToken(authen, "refresh")
+		var password = authen.Password
+		authen, err = repository.FindEmail(authen.Email)
 		if err != nil {
-			utils.SentMessage(response, false, "crete  token error")
+			utils.SentMessage(response, false, "user not found")
+		} else {
+			err = utils.Decrypt(password, authen.Password)
+			if err != nil {
+				utils.SentMessage(response, false, "invalid password")
+			} else {
+				authen.AccessToken, err = utils.GenerateToken(authen, "access")
+				authen.RefreshToken, err = utils.GenerateToken(authen, "refresh")
+				var rs models.RespondAuthen
+				authen.Password = ""
+				rs.Data = authen
+				rs.Result = true
+				var ms models.Message
+				ms.Th = "ล็อกอินสำเร็จ"
+				ms.En = "login success"
+				rs.Message = ms
+				json.NewEncoder(response).Encode(rs)
+				token.Token = authen.RefreshToken
+			}
 		}
-		var rs models.RespondAuthen
-		authen.Password = ""
-		rs.Data = authen
-		rs.Result = true
-		var ms models.Message
-		ms.Th = "ล็อกอินสำเร็จ"
-		ms.En = "login success"
-		rs.Message = ms
-
-		json.NewEncoder(response).Encode(rs)
-		token.Token = authen.RefreshToken
 	}
+
 }
 
 func VerifyAccess(next http.HandlerFunc) http.HandlerFunc {
