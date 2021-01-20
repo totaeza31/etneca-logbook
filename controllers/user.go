@@ -20,6 +20,10 @@ type newToken struct {
 	RefreshToken string `json:"refreshToken,omitempty" bson:"refreshToken,omitempty"`
 }
 
+type link struct {
+	Link string `json:"link,omitempty" bson:"link,omitempty"`
+}
+
 var token Token
 
 func Login(response http.ResponseWriter, request *http.Request) {
@@ -40,7 +44,14 @@ func Login(response http.ResponseWriter, request *http.Request) {
 		if err != nil {
 			utils.SentMessage(response, false, "crete  token error")
 		}
-		json.NewEncoder(response).Encode(authen)
+		var rs models.Respond
+		rs.Data = authen
+		rs.Result = true
+		var ms models.Message
+		ms.Th = "ล็อกอินสำเร็จ"
+		ms.En = "login success"
+		rs.Message = ms
+		json.NewEncoder(response).Encode(rs)
 		token.Token = authen.RefreshToken
 	}
 }

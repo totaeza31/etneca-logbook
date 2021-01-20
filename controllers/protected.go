@@ -48,3 +48,18 @@ func GetNewToken(response http.ResponseWriter, request *http.Request) {
 		}
 	}
 }
+
+func GetNewPassword(response http.ResponseWriter, request *http.Request) {
+	response.Header().Add("content-type", "application/json")
+	var authen models.Authen
+	json.NewDecoder(request.Body).Decode(&authen)
+	_, err := repository.FindEmail(authen.Email)
+	if err != nil {
+		utils.SentMessage(response, false, "email not found")
+	} else {
+		path := utils.SentMail(authen.Email)
+		var link link
+		link.Link = path
+		json.NewEncoder(response).Encode(link)
+	}
+}

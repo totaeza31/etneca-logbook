@@ -19,5 +19,7 @@ func main() {
 	router.HandleFunc("/profile", controllers.VerifyAccess(controllers.GetProfile)).Methods("GET")
 	router.HandleFunc("/token", controllers.VarifyRefresh(controllers.GetNewToken)).Methods("POST")
 	router.HandleFunc("/logout", controllers.Logout).Methods("POST")
+
+	router.HandleFunc("/forgot", controllers.GetNewPassword).Methods("POST")
 	http.ListenAndServe(":"+os.Getenv("PORT"), router)
 }
