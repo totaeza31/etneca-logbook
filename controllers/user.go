@@ -44,7 +44,7 @@ func Login(response http.ResponseWriter, request *http.Request) {
 		if err != nil {
 			utils.SentMessage(response, false, "crete  token error")
 		}
-		var rs models.Respond
+		var rs models.RespondAuthen
 		authen.Password = ""
 		rs.Data = authen
 		rs.Result = true

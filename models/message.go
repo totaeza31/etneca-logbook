@@ -1,9 +1,15 @@
 package models
 
-type Respond struct {
+type RespondAuthen struct {
+	Result  bool    `json:"result"`
+	Message Message `json:"message"`
+	Data    Authen  `json:"data"`
+}
+
+type RespondUser struct {
 	Message Message `json:"message"`
 	Result  bool    `json:"result"`
-	Data    Authen  `json:"data"`
+	Data    User    `json:"data"`
 }
 
 type Message struct {

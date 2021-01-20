@@ -32,7 +32,6 @@ func GetProfile(response http.ResponseWriter, request *http.Request) {
 		json.NewEncoder(response).Encode(user)
 	}
 }
-
 func GetNewToken(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 	var authen models.Authen
