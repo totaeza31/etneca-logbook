@@ -47,3 +47,24 @@ func FindEmail(email string) (models.Authen, error) {
 	}
 	return authen, nil
 }
+
+func UpdatePassword(password string, email string) error {
+	db, err := driver.ConnectMongo()
+	filter := bson.D{{"email", email}}
+
+	update := bson.D{{"$set",
+		bson.D{
+			{"password", password},
+		},
+	}}
+	_, err = db.UpdateOne(
+		context.Background(),
+		filter,
+		update,
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

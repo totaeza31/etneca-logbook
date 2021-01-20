@@ -21,5 +21,6 @@ func main() {
 	router.HandleFunc("/logout", controllers.Logout).Methods("POST")
 
 	router.HandleFunc("/forgot", controllers.GetNewPassword).Methods("POST")
+	router.HandleFunc("/reset/{email}", controllers.ResetPassword).Methods("GET")
 	http.ListenAndServe(":"+os.Getenv("PORT"), router)
 }

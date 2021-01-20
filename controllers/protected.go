@@ -7,8 +7,14 @@ import (
 	"etneca-logbook/utils"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
+
+type password struct {
+	Password        string `json:"password,omitempty" bson:"password,omitempty"`
+	ConfirmPassword string `json:"confirmPassword,omitempty" bson:"confirmPassword,omitempty"`
+}
 
 func GetProfile(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
@@ -62,4 +68,35 @@ func GetNewPassword(response http.ResponseWriter, request *http.Request) {
 		link.Link = path
 		json.NewEncoder(response).Encode(link)
 	}
+}
+
+func ResetPassword(response http.ResponseWriter, request *http.Request) {
+	response.Header().Add("content-type", "application/json")
+	var password password
+	json.NewDecoder(request.Body).Decode(&password)
+	param := mux.Vars(request)
+	path := param["email"]
+	token, _ := utils.ValidPath(path)
+	if token.Valid {
+		email, _ := utils.ParseEmail(path)
+		_, err := repository.FindEmail(email)
+		if err != nil {
+			utils.SentMessage(response, false, "email not found")
+		} else {
+			if password.Password == password.ConfirmPassword {
+				password := utils.Encrypt(password.Password)
+				err := repository.UpdatePassword(password, email)
+				if err != nil {
+					utils.SentMessage(response, false, "change password error")
+				} else {
+					utils.SentMessage(response, true, "change password success")
+				}
+			} else {
+				utils.SentMessage(response, false, "Password do not match")
+			}
+		}
+	} else {
+		utils.SentMessage(response, false, "path error")
+	}
+
 }

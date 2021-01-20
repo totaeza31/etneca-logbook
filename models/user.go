@@ -18,7 +18,7 @@ type User struct {
 	Tel         string             `json:"telephone,omitempty" bson:"telephone,omitempty"`
 	NamePost    namePost           `json:"namePost"`
 	AddressPost addressPost        `json:"addressPost"`
-	Picture     string
+	Picture     string             `json:"picture"`
 }
 
 type firstName struct {

@@ -17,7 +17,7 @@ import (
 )
 
 type Alert struct {
-	Result  bool   "false"
+	Result  bool   `json:"result"`
 	Message string `json:"message,omitempty" bson:"message,omitempty"`
 }
 
@@ -36,7 +36,9 @@ func SentMessage(response http.ResponseWriter, result bool, message string) {
 	var alert Alert
 	alert.Result = result
 	alert.Message = message
-	response.WriteHeader(http.StatusBadRequest)
+	if result == false {
+		response.WriteHeader(http.StatusBadRequest)
+	}
 	json.NewEncoder(response).Encode(alert)
 }
 
@@ -105,6 +107,16 @@ func ValidRefreshToken(refreshToken string) (*jwt.Token, error) {
 	return token, err
 }
 
+func ValidPath(refreshToken string) (*jwt.Token, error) {
+	token, err := jwt.Parse(refreshToken, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("There was an Error")
+		}
+		return []byte(os.Getenv("KEY_CRYPTO")), nil
+	})
+	return token, err
+}
+
 func ParseJson(Token string) (string, bool) {
 	var ID string
 	token, _ := jwt.Parse(Token, nil)
@@ -117,6 +129,18 @@ func ParseJson(Token string) (string, bool) {
 	return ID, err
 }
 
+func ParseEmail(Token string) (string, bool) {
+	var email string
+	token, _ := jwt.Parse(Token, nil)
+	claims, err := token.Claims.(jwt.MapClaims)
+	for key, val := range claims {
+		if key == "email" {
+			email = val.(string)
+		}
+	}
+	return email, err
+}
+
 func generatePath(text string) string {
 	key := os.Getenv("KEY_CRYPTO")
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
@@ -127,12 +151,9 @@ func generatePath(text string) string {
 }
 
 func SentMail(email string) string {
-	fmt.Println(email)
 	path := generatePath(email)
 	var link = "www.myurl.com/forget/"
-
 	link = link + path
-
 	var FullHTML = `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 	<html dir="ltr" xmlns="http://www.w3.org/1999/xhtml">
 	<head>
@@ -194,13 +215,11 @@ func SentMail(email string) string {
 	    </div>
 	</body>
 	</html>`
-
 	mailOpt := &sulat.SendMail{
 		Subject: "Reset Password!",
 		From:    sulat.NewEmail("kritmet", "kengforsteam@gmail.com"),
 		To:      sulat.NewEmail("Eiei Manz", "kritmet.w@gmail.com"),
 	}
-
 	htmlContent, err := sulat.SetHTML(&sulat.EmailHTMLFormat{
 		IsFullHTML:       true,
 		FullHTMLTemplate: FullHTML,
@@ -208,11 +227,9 @@ func SentMail(email string) string {
 	if err != nil {
 		itrlog.Fatal(err)
 	}
-
 	_, err = sulat.SendEmailSG(mailOpt, htmlContent, &SGC)
 	if err != nil {
 		itrlog.Fatal(err)
 	}
 	return link
-
 }
