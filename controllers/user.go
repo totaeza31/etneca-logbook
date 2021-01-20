@@ -30,7 +30,7 @@ func Login(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 	var authen models.Authen
 	err := json.NewDecoder(request.Body).Decode(&authen)
-	if err != nil {
+	if err != nil || authen.Email == "" || authen.Password == "" {
 		utils.SentMessage(response, false, "invalid syntax")
 	} else {
 		var password = authen.Password

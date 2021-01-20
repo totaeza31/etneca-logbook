@@ -39,6 +39,7 @@ func SentMessage(response http.ResponseWriter, result bool, message string) {
 	if message == "invalid syntax" {
 		response.WriteHeader(http.StatusBadRequest)
 	}
+
 	json.NewEncoder(response).Encode(alert)
 }
 
