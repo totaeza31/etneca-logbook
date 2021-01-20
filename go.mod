@@ -9,6 +9,7 @@ require (
 	github.com/gorilla/mux v1.8.0
 	github.com/itrepablik/itrlog v1.0.3
 	github.com/itrepablik/sulat v1.0.7
+	github.com/rs/cors v1.7.0 // indirect
 	github.com/subosito/gotenv v1.2.0
 	go.mongodb.org/mongo-driver v1.4.4
 	golang.org/x/crypto v0.0.0-20200604202706-70a84ac30bf9

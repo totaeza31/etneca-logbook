@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/gorilla/mux"
+	"github.com/rs/cors"
 	"github.com/subosito/gotenv"
 )
 
@@ -22,5 +23,7 @@ func main() {
 
 	router.HandleFunc("/forgot", controllers.GetNewPassword).Methods("POST")
 	router.HandleFunc("/reset/{email}", controllers.ResetPassword).Methods("GET")
-	http.ListenAndServe(":"+os.Getenv("PORT"), router)
+
+	handler := cors.Default().Handler(router)
+	http.ListenAndServe(":"+os.Getenv("PORT"), handler)
 }
