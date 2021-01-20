@@ -45,12 +45,14 @@ func Login(response http.ResponseWriter, request *http.Request) {
 			utils.SentMessage(response, false, "crete  token error")
 		}
 		var rs models.Respond
+		authen.Password = ""
 		rs.Data = authen
 		rs.Result = true
 		var ms models.Message
 		ms.Th = "ล็อกอินสำเร็จ"
 		ms.En = "login success"
 		rs.Message = ms
+
 		json.NewEncoder(response).Encode(rs)
 		token.Token = authen.RefreshToken
 	}
