@@ -59,10 +59,10 @@ func GenerateToken(authen models.Authen, types string) (string, error) {
 
 	if types == "access" {
 		secret = os.Getenv("ACCESS_TOKEN")
-		expires = time.Now().Add(time.Second * 30).Unix()
+		expires = time.Now().Add(time.Minute * 30).Unix()
 	} else if types == "refresh" {
 		secret = os.Getenv("REFRESH_TOKEN")
-		expires = time.Now().Add(time.Minute * 3).Unix()
+		expires = time.Now().Add(time.Minute * 60 * 12).Unix()
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
@@ -149,8 +149,6 @@ func generatePath(text string) string {
 	tokenString, _ := token.SignedString([]byte(key))
 	return tokenString
 }
-
-
 
 func SentMail(email string) string {
 	path := generatePath(email)
