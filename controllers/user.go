@@ -5,6 +5,7 @@ import (
 	"etneca-logbook/models"
 	"etneca-logbook/repository"
 	"etneca-logbook/utils"
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -28,6 +29,7 @@ var token Token
 
 func Login(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
+	fmt.Println("hello")
 	var authen models.Authen
 	err := json.NewDecoder(request.Body).Decode(&authen)
 	if err != nil || authen.Email == "" || authen.Password == "" {
@@ -57,7 +59,6 @@ func Login(response http.ResponseWriter, request *http.Request) {
 			}
 		}
 	}
-
 }
 
 func VerifyAccess(next http.HandlerFunc) http.HandlerFunc {

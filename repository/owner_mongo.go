@@ -39,6 +39,7 @@ func FindOwner(id primitive.ObjectID) (models.Owner, error) {
 	if err != nil {
 		return owner, err
 	}
+	owner.Birthday = owner.Birthday_date.Format("2006-01-02")
 	return owner, nil
 }
 
@@ -52,4 +53,49 @@ func InsertOwner(ower models.Owner) error {
 		return err
 	}
 	return nil
+}
+
+func UpdateOwer(owner models.Owner, id primitive.ObjectID) error {
+	db, err := driver.ConnectMongoBO()
+	filter := bson.D{{"_id", id}}
+	update := bson.D{{"$set", owner}}
+	_, err = db.UpdateOne(
+		context.Background(),
+		filter,
+		update,
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func UpadateOwnerCredit(credit int64, id primitive.ObjectID) error {
+	db, err := driver.ConnectMongoBO()
+	filter := bson.D{{"_id", id}}
+	update := bson.D{{"$set",
+		bson.D{
+			{"credit", credit},
+		},
+	}}
+	_, err = db.UpdateOne(
+		context.Background(),
+		filter,
+		update,
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func DeleteOwner(id primitive.ObjectID) error {
+	db, err := driver.ConnectMongoBO()
+	_, err = db.DeleteOne(context.TODO(), bson.M{"_id": id})
+	if err != nil {
+		return err
+	}
+	return err
 }
