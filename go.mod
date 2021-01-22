@@ -13,5 +13,5 @@ require (
 	github.com/subosito/gotenv v1.2.0
 	go.mongodb.org/mongo-driver v1.4.4
 	golang.org/x/crypto v0.0.0-20200604202706-70a84ac30bf9
-	google.golang.org/genproto v0.0.0-20210119180700-e258113e47cc // indirect
+	google.golang.org/genproto v0.0.0-20210119180700-e258113e47cc
 )

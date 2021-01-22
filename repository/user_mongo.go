@@ -11,7 +11,7 @@ import (
 
 func FindUser(id primitive.ObjectID) (models.User, error) {
 	var user models.User
-	db, err := driver.ConnectMongo()
+	db, err := driver.ConnectMongoProfile()
 	if err != nil {
 		return user, err
 	}
@@ -22,11 +22,9 @@ func FindUser(id primitive.ObjectID) (models.User, error) {
 	return user, nil
 }
 
-
-
 func FindAuthen(id primitive.ObjectID) (models.Authen, error) {
 	var authen models.Authen
-	db, err := driver.ConnectMongo()
+	db, err := driver.ConnectMongoProfile()
 	if err != nil {
 		return authen, err
 	}
@@ -39,7 +37,7 @@ func FindAuthen(id primitive.ObjectID) (models.Authen, error) {
 
 func FindEmail(email string) (models.Authen, error) {
 	var authen models.Authen
-	db, err := driver.ConnectMongo()
+	db, err := driver.ConnectMongoProfile()
 	if err != nil {
 		return authen, err
 	}
@@ -51,7 +49,7 @@ func FindEmail(email string) (models.Authen, error) {
 }
 
 func UpdatePassword(password string, email string) error {
-	db, err := driver.ConnectMongo()
+	db, err := driver.ConnectMongoProfile()
 	filter := bson.D{{"email", email}}
 
 	update := bson.D{{"$set",
@@ -71,25 +69,19 @@ func UpdatePassword(password string, email string) error {
 	return nil
 }
 
-func DeleteUser(id string)error{
-	db, err := driver.ConnectMongo()
-	_ , err = db.DeleteOne(context.TODO(), bson.M{"_id": id})
+func DeleteUser(id primitive.ObjectID) error {
+	db, err := driver.ConnectMongoProfile()
+	_, err = db.DeleteOne(context.TODO(), bson.M{"_id": id})
 	if err != nil {
 		return err
 	}
 	return err
 }
 
-
-func UpdateUser(password string, email string) error {
-	db, err := driver.ConnectMongo()
-	filter := bson.D{{"email", email}}
-
-	update := bson.D{{"$set",
-		bson.D{
-			{"password", password},
-		},
-	}}
+func UpdateUser(user models.User, id primitive.ObjectID) error {
+	db, err := driver.ConnectMongoProfile()
+	filter := bson.D{{"_id", id}}
+	update := bson.D{{"$set", user}}
 	_, err = db.UpdateOne(
 		context.Background(),
 		filter,
@@ -100,4 +92,26 @@ func UpdateUser(password string, email string) error {
 	}
 
 	return nil
+}
+
+func GetPackageAllPackage() (models.Data, error) {
+	var data models.Data
+	var packages models.Package
+
+	db, err := driver.ConnectMongoPackage()
+	if err != nil {
+		return data, err
+	}
+	cur, err := db.Find(context.TODO(), bson.D{{}})
+	if err != nil {
+		return data, err
+	}
+	for cur.Next(context.Background()) {
+
+		err = cur.Decode(&packages)
+		data.Package = append(data.Package, packages)
+
+	}
+
+	return data, nil
 }

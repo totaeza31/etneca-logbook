@@ -24,8 +24,15 @@ func main() {
 	router.HandleFunc("/forgot", controllers.GetNewPassword).Methods("POST")
 	router.HandleFunc("/reset/{email}", controllers.ResetPassword).Methods("GET")
 
-	router.HandleFunc("/delete/{id}", controllers.DeleteUser).Methods("GET")
-	router.HandleFunc("/upload/{id}", controllers.UpdateUser).Methods("GET")
+	router.HandleFunc("/deleteUser/{id}", controllers.DeleteUser).Methods("GET")
+	router.HandleFunc("/updateUser/{id}", controllers.UpdateUser).Methods("GET")
+
+	router.HandleFunc("/package", controllers.GetPackage).Methods("GET")
+
+	// router.HandleFunc("/owner", controllers.GetPackage).Methods("POST")
+	router.HandleFunc("/owner", controllers.GetOwner).Methods("GET")
+	router.HandleFunc("/owner/{id}", controllers.GetOwnerByID).Methods("GET")
+	router.HandleFunc("/owner", controllers.PostOwner).Methods("POST")
 
 	handler := cors.Default().Handler(router)
 	http.ListenAndServe(":"+os.Getenv("PORT"), handler)

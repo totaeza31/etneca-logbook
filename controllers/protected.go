@@ -105,7 +105,8 @@ func DeleteUser(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 	param := mux.Vars(request)
 	id := param["id"]
-	err := repository.DeleteUser(id)
+	objID, _ := primitive.ObjectIDFromHex(id)
+	err := repository.DeleteUser(objID)
 	if err != nil {
 		utils.SentMessage(response, false, "Delete failed")
 	} else {
@@ -122,6 +123,24 @@ func UpdateUser(response http.ResponseWriter, request *http.Request) {
 	if err != nil {
 		utils.SentMessage(response, false, "this user not found")
 	} else {
-		
+		var user models.User
+		json.NewDecoder(request.Body).Decode(&user)
+		err = repository.UpdateUser(user, objID)
+		if err != nil {
+			fmt.Println(err)
+		} else {
+			utils.SentMessage(response, true, "update success")
+		}
 	}
+}
+
+func GetPackage(response http.ResponseWriter, request *http.Request) {
+	response.Header().Add("content-type", "application/json")
+	var packages models.Data
+	packages, err := repository.GetPackageAllPackage()
+	if err != nil {
+		utils.SentMessage(response, false, "this user not found")
+	}
+	json.NewEncoder(response).Encode(packages)
+
 }

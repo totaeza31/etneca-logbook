@@ -50,7 +50,6 @@ func Decrypt(password, hash string) error {
 
 func Encrypt(text string) string {
 	bytes, _ := bcrypt.GenerateFromPassword([]byte(text), 14)
-	fmt.Println(bcrypt.Cost(bytes))
 	return string(bytes)
 }
 
@@ -150,6 +149,8 @@ func generatePath(text string) string {
 	tokenString, _ := token.SignedString([]byte(key))
 	return tokenString
 }
+
+
 
 func SentMail(email string) string {
 	path := generatePath(email)

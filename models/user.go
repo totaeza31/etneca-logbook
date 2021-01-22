@@ -8,17 +8,17 @@ import (
 
 type User struct {
 	ID          primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
-	FirstName   firstName          `json:"firstname"`
-	LastName    lastName           `json:"lastname"`
-	Address     address            `json:"address"`
-	Brithday    time.Time          `json:"brithday"`
-	Fax         string             `json:"fax"`
-	Email       string             `json:"email"`
-	Password    string             `json:"password,omitempty" bson:"password,omitempty"`
+	FirstName   firstName          `json:"firstname,omitempty" bson:"firstname,omitempty"`
+	LastName    lastName           `json:"lastname,omitempty" bson:"lastname,omitempty"`
+	Address     address            `json:"address,omitempty" bson:"address,omitempty"`
+	Birthday    time.Time          `json:"birthday,omitempty" bson:"birthday,omitempty`
+	Fax         string             `json:"fax,omitempty" bson:"fax,omitempty"`
+	Email       string             `json:"email,omitempty"  bson:"email,omitempty"`
+	Password    string             `json:"password,omitempty" bson:"password"`
 	Tel         string             `json:"telephone,omitempty" bson:"telephone,omitempty"`
-	NamePost    namePost           `json:"namePost"`
-	AddressPost addressPost        `json:"addressPost"`
-	Picture     string             `json:"picture"`
+	NamePost    namePost           `json:"namePost,omitempty" bson:"namePost,omitempty"`
+	AddressPost addressPost        `json:"addressPost,omitempty" bson:"addressPost,omitempty"`
+	Picture     string             `json:"picture,omitempty" bson:"picture,omitempty"  `
 }
 
 type firstName struct {
@@ -32,11 +32,7 @@ type lastName struct {
 	En string `json:"en"`
 	Bu string `json:"bu"`
 }
-type address struct {
-	Th string `json:"th"`
-	En string `json:"en"`
-	Bu string `json:"bu"`
-}
+
 
 type namePost struct {
 	Th string `json:"th"`

@@ -14,7 +14,7 @@ func init() {
 	gotenv.Load()
 }
 
-func ConnectMongo() (*mongo.Collection, error) {
+func ConnectMongoProfile() (*mongo.Collection, error) {
 	clientOptions := options.Client().ApplyURI(os.Getenv("USER_DB"))
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 
@@ -23,6 +23,32 @@ func ConnectMongo() (*mongo.Collection, error) {
 	}
 
 	collection := client.Database("User").Collection("profile")
+
+	return collection, nil
+}
+
+func ConnectMongoPackage() (*mongo.Collection, error) {
+	clientOptions := options.Client().ApplyURI(os.Getenv("USER_DB"))
+	client, err := mongo.Connect(context.TODO(), clientOptions)
+
+	if err != nil {
+		return nil, err
+	}
+
+	collection := client.Database("User").Collection("package")
+
+	return collection, nil
+}
+
+func ConnectMongoBO() (*mongo.Collection, error) {
+	clientOptions := options.Client().ApplyURI(os.Getenv("BO_DB"))
+	client, err := mongo.Connect(context.TODO(), clientOptions)
+
+	if err != nil {
+		return nil, err
+	}
+
+	collection := client.Database("back_office").Collection("owner")
 
 	return collection, nil
 }
