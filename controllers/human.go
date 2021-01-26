@@ -16,8 +16,7 @@ func GetAllHuman(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 	allHuman, err := repository.FindAllHuman()
 	if err != nil {
-		respond = models.Get_data_error()
-		utils.SentMessage(response, respond)
+		utils.SentNewMessage(response, false, "can not found")
 	} else {
 
 		json.NewEncoder(response).Encode(allHuman.Human)
@@ -31,8 +30,7 @@ func GetHumanByID(response http.ResponseWriter, request *http.Request) {
 	objID, _ := primitive.ObjectIDFromHex(id)
 	human, err := repository.FindHuman(objID)
 	if err != nil {
-		respond = models.Get_data_error()
-		utils.SentMessage(response, respond)
+		utils.SentNewMessage(response, false, "can not found")
 	} else {
 		json.NewEncoder(response).Encode(human)
 	}
@@ -46,11 +44,10 @@ func PostHuman(response http.ResponseWriter, request *http.Request) {
 
 	err = repository.InsertHuman(human)
 	if err != nil {
-		respond = models.Insert_error()
-		utils.SentMessage(response, respond)
+		utils.SentNewMessage(response, false, "can not save data")
 	} else {
 		respond = models.Insert_success()
-		utils.SentMessage(response, respond)
+		utils.SentNewMessage(response, true, "save data success")
 	}
 }
 
@@ -61,18 +58,15 @@ func PutHuman(response http.ResponseWriter, request *http.Request) {
 	objID, _ := primitive.ObjectIDFromHex(id)
 	_, err := repository.FindHuman(objID)
 	if err != nil {
-		respond = models.User_not_found()
-		utils.SentMessage(response, respond)
+		utils.SentNewMessage(response, false, "id not found")
 	} else {
 		var human models.Human
 		json.NewDecoder(request.Body).Decode(&human)
 		err = repository.UpdateHuman(human, objID)
 		if err != nil {
-			respond = models.Update_success()
-			utils.SentMessage(response, respond)
+			utils.SentNewMessage(response, false, "update failed")
 		} else {
-			respond = models.Update_success()
-			utils.SentMessage(response, respond)
+			utils.SentNewMessage(response, true, "update success")
 		}
 	}
 }
@@ -84,10 +78,8 @@ func DelHuman(response http.ResponseWriter, request *http.Request) {
 	objID, _ := primitive.ObjectIDFromHex(id)
 	err := repository.DeleteHuman(objID)
 	if err != nil {
-		respond = models.Delete_error()
-		utils.SentMessage(response, respond)
+		utils.SentNewMessage(response, false, "delete failed")
 	} else {
-		respond = models.Delete_success()
-		utils.SentMessage(response, respond)
+		utils.SentNewMessage(response, true, "delete success")
 	}
 }

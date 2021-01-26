@@ -21,6 +21,11 @@ type Alert struct {
 	Message message
 }
 
+type Danger struct {
+	Result  bool   `json:"result"`
+	Message string `json:"message"`
+}
+
 type message struct {
 	Th string `json:"th"`
 	En string `json:"en"`
@@ -36,6 +41,17 @@ func init() {
 		SendGridEndPoint: "/v3/mail/send",
 		SendGridHost:     "https://api.sendgrid.com",
 	}
+}
+
+func SentNewMessage(response http.ResponseWriter, result bool, message string) {
+	var danger Danger
+	if message == "invalid syntax" {
+		response.WriteHeader(http.StatusBadRequest)
+	}
+	danger.Message = message
+	danger.Result = result
+
+	json.NewEncoder(response).Encode(danger)
 }
 
 func SentMessage(response http.ResponseWriter, message models.Constants) {
