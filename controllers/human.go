@@ -19,11 +19,8 @@ func GetAllHuman(response http.ResponseWriter, request *http.Request) {
 		respond = models.Get_data_error()
 		utils.SentMessage(response, respond)
 	} else {
-		var message models.MessageAllHuman
-		message.AllHuman = allHuman
-		message.Result = true
-		message.Message = "get data success"
-		json.NewEncoder(response).Encode(message)
+
+		json.NewEncoder(response).Encode(allHuman.Human)
 	}
 }
 
@@ -37,11 +34,7 @@ func GetHumanByID(response http.ResponseWriter, request *http.Request) {
 		respond = models.Get_data_error()
 		utils.SentMessage(response, respond)
 	} else {
-		var message models.MessageHuman
-		message.Human = human
-		message.Result = true
-		message.Message = "get data success"
-		json.NewEncoder(response).Encode(message)
+		json.NewEncoder(response).Encode(human)
 	}
 }
 

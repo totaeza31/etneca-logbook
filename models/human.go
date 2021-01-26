@@ -2,20 +2,8 @@ package models
 
 import "go.mongodb.org/mongo-driver/bson/primitive"
 
-type MessageAllHuman struct {
-	Result   bool     `json:"result"`
-	Message  string   `json:"message,omitempty"`
-	AllHuman AllHuman `json:"data,omitempty"`
-}
-
-type MessageHuman struct {
-	Result  bool   `json:"result"`
-	Message string `json:"message,omitempty"`
-	Human   Human  `json:"data,omitempty"`
-}
-
 type AllHuman struct {
-	Human []Human `json:"data,omitempty"`
+	Human []Human `json:""`
 }
 
 type Human struct {
