@@ -53,6 +53,19 @@ func ConnectMongoBO() (*mongo.Collection, error) {
 	return collection, nil
 }
 
+func ConnectMongoHuman() (*mongo.Collection, error) {
+	clientOptions := options.Client().ApplyURI(os.Getenv("BO_DB"))
+	client, err := mongo.Connect(context.TODO(), clientOptions)
+
+	if err != nil {
+		return nil, err
+	}
+
+	collection := client.Database("back_office").Collection("human")
+
+	return collection, nil
+}
+
 func ConnectRedis() (*redis.Client, error) {
 
 	addr := os.Getenv("ADDR_REDIS")

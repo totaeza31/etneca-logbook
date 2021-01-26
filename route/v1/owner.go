@@ -7,7 +7,6 @@ import (
 )
 
 func OwnerRoute(router *mux.Router) {
-	
 
 	router.HandleFunc("/forgot", controllers.GetNewPassword).Methods("POST")
 	router.HandleFunc("/reset/{email}", controllers.ResetPassword).Methods("GET")

@@ -17,8 +17,14 @@ import (
 )
 
 type Alert struct {
-	Result  bool   `json:"result"`
-	Message string `json:"message,omitempty" bson:"message,omitempty"`
+	Result  bool
+	Message message
+}
+
+type message struct {
+	Th string `json:"th"`
+	En string `json:"en"`
+	Bu string `json:"bu"`
 }
 
 var SGC = sulat.SGC{}
@@ -32,15 +38,13 @@ func init() {
 	}
 }
 
-func SentMessage(response http.ResponseWriter, result bool, message string) {
-	var alert Alert
-	alert.Result = result
-	alert.Message = message
-	if message == "invalid syntax" {
+func SentMessage(response http.ResponseWriter, message models.Constants) {
+
+	if message.Message.En == "invalid syntax" {
 		response.WriteHeader(http.StatusBadRequest)
 	}
 
-	json.NewEncoder(response).Encode(alert)
+	json.NewEncoder(response).Encode(message)
 }
 
 func Decrypt(password, hash string) error {

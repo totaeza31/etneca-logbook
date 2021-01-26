@@ -34,13 +34,3 @@ type lastName struct {
 }
 
 
-type namePost struct {
-	Th string `json:"th"`
-	En string `json:"en"`
-	Bu string `json:"bu"`
-}
-type addressPost struct {
-	Th string `json:"th"`
-	En string `json:"en"`
-	Bu string `json:"bu"`
-}

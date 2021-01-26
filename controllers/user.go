@@ -33,16 +33,19 @@ func Login(response http.ResponseWriter, request *http.Request) {
 	var authen models.Authen
 	err := json.NewDecoder(request.Body).Decode(&authen)
 	if err != nil || authen.Email == "" || authen.Password == "" {
-		utils.SentMessage(response, false, "invalid syntax")
+		respond = models.Invalid_syntax()
+		utils.SentMessage(response, respond)
 	} else {
 		var password = authen.Password
 		authen, err = repository.FindEmail(authen.Email)
 		if err != nil {
-			utils.SentMessage(response, false, "user not found")
+			respond = models.User_not_found()
+			utils.SentMessage(response, respond)
 		} else {
 			err = utils.Decrypt(password, authen.Password)
 			if err != nil {
-				utils.SentMessage(response, false, "invalid password")
+				respond = models.User_not_found()
+				utils.SentMessage(response, respond)
 			} else {
 				authen.AccessToken, err = utils.GenerateToken(authen, "access")
 				authen.RefreshToken, err = utils.GenerateToken(authen, "refresh")
@@ -71,11 +74,13 @@ func VerifyAccess(next http.HandlerFunc) http.HandlerFunc {
 			if tokenValid.Valid {
 				next.ServeHTTP(response, request)
 			} else {
-				utils.SentMessage(response, false, "invalid token")
+				respond = models.Invalid_token()
+				utils.SentMessage(response, respond)
 				return
 			}
 		} else {
-			utils.SentMessage(response, false, "invalid token")
+			respond = models.Invalid_token()
+			utils.SentMessage(response, respond)
 			return
 		}
 	})
@@ -89,23 +94,27 @@ func VarifyRefresh(next http.HandlerFunc) http.HandlerFunc {
 		if tokenValid.Valid {
 			ID, valid := utils.ParseJson(token.Token)
 			if valid == false {
-				utils.SentMessage(response, false, "parse token failed")
+				respond = models.User_not_found()
+				utils.SentMessage(response, respond)
 			}
 			objID, _ := primitive.ObjectIDFromHex(ID)
 			var authen models.Authen
 			authen, _ = repository.FindAuthen(objID)
 			val, err := repository.GetToken(authen.ID.Hex())
 			if val != token.Token {
-				utils.SentMessage(response, false, "old token")
+				respond = models.Invalid_token()
+				utils.SentMessage(response, respond)
 			} else {
 				if err != nil {
-					utils.SentMessage(response, false, "token not found")
+					respond = models.Token_expired()
+					utils.SentMessage(response, respond)
 				} else {
 					next.ServeHTTP(response, request)
 				}
 			}
 		} else {
-			utils.SentMessage(response, false, "invalid token")
+			respond = models.Invalid_token()
+			utils.SentMessage(response, respond)
 			return
 		}
 	})
@@ -118,24 +127,31 @@ func Logout(response http.ResponseWriter, request *http.Request) {
 	if tokenValid.Valid {
 		ID, valid := utils.ParseJson(token.Token)
 		if valid == false {
-			utils.SentMessage(response, false, "parse token failed")
-		}
-		objID, _ := primitive.ObjectIDFromHex(ID)
-		var authen models.Authen
-		authen, _ = repository.FindAuthen(objID)
-		val, err := repository.GetToken(authen.ID.Hex())
-		if val != token.Token {
-			utils.SentMessage(response, false, "old token")
+			respond = models.User_not_found()
+			utils.SentMessage(response, respond)
 		} else {
-			if err != nil {
-				utils.SentMessage(response, false, "token not found")
+			objID, _ := primitive.ObjectIDFromHex(ID)
+			var authen models.Authen
+			authen, _ = repository.FindAuthen(objID)
+			val, err := repository.GetToken(authen.ID.Hex())
+			if val != token.Token {
+				respond = models.User_not_found()
+				utils.SentMessage(response, respond)
 			} else {
-				repository.DeleteToken(authen.ID.Hex())
-				utils.SentMessage(response, true, "logout success")
+				if err != nil {
+					respond = models.Token_expired()
+					utils.SentMessage(response, respond)
+				} else {
+					repository.DeleteToken(authen.ID.Hex())
+					respond = models.Logout_success()
+					utils.SentMessage(response, respond)
+				}
 			}
 		}
+
 	} else {
-		utils.SentMessage(response, true, "invalid token")
+		respond = models.Invalid_token()
+		utils.SentMessage(response, respond)
 		return
 	}
 }

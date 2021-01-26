@@ -1,6 +1,7 @@
 package route
 
 import (
+	test "etneca-logbook/route/testRedux"
 	v1 "etneca-logbook/route/v1"
 	"net/http"
 	"os"
@@ -19,6 +20,9 @@ func IndexRoute() {
 
 	v1.AuthenRoute(router.PathPrefix("/v1").Subrouter())
 	v1.OwnerRoute(router.PathPrefix("/v1").Subrouter())
+
+	test.AuthenRoute(router.PathPrefix("/test").Subrouter())
+	test.OwnerRoute(router.PathPrefix("/test").Subrouter())
 
 	handler := cors.Default().Handler(router)
 	http.ListenAndServe(":"+os.Getenv("PORT"), handler)
