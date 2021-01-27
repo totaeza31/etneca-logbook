@@ -172,6 +172,28 @@ func Update_success() Constants {
 	}
 }
 
+func Edit_error() Constants {
+	return Constants{
+		false,
+		message{
+			"แก้ไขข้อมูลผิดพลาด",
+			"edit data error",
+			"",
+		},
+	}
+}
+
+func Edit_success() Constants {
+	return Constants{
+		true,
+		message{
+			"แก้ไขข้อมูลสำเร็จ",
+			"edit data success",
+			"",
+		},
+	}
+}
+
 func Delete_error() Constants {
 	return Constants{
 		false,

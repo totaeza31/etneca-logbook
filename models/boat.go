@@ -15,7 +15,7 @@ type Boat struct {
 	BoatName      boatname           `json:"boatname" bson:"boatname"`
 	BoatReg       string             `json:"boat_reg" bson:"boat_reg"`
 	Grosstons     float64            `json:"grosstons" bson:"grosstons"`
-	TypeBoat      typeBoat           `json:"typeBoat" bson:"typeBoat"`
+	TypeBoat      []typeBoat           `json:"typeBoat" bson:"typeBoat"`
 	Agent         agent              `json:"agent" bson:"agent"`
 	BoatMan       boatman            `json:"boatman" bson:"boatman"`
 	Address       address            `json:"address" bson:"address"`

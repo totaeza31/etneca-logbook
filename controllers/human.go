@@ -16,7 +16,8 @@ func GetAllHuman(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 	allHuman, err := repository.FindAllHuman()
 	if err != nil {
-		utils.SentNewMessage(response, false, "can not found")
+		message := models.Get_data_error()
+		utils.SentMessage(response, message)
 	} else {
 		json.NewEncoder(response).Encode(allHuman.Human)
 	}
@@ -29,7 +30,8 @@ func GetHumanByID(response http.ResponseWriter, request *http.Request) {
 	objID, _ := primitive.ObjectIDFromHex(id)
 	human, err := repository.FindHuman(objID)
 	if err != nil {
-		utils.SentNewMessage(response, false, "can not found")
+		message := models.Get_data_error()
+		utils.SentMessage(response, message)
 	} else {
 		json.NewEncoder(response).Encode(human)
 	}
@@ -69,9 +71,11 @@ func PutHuman(response http.ResponseWriter, request *http.Request) {
 		json.NewDecoder(request.Body).Decode(&human)
 		err = repository.UpdateHuman(human, objID)
 		if err != nil {
-			utils.SentNewMessage(response, false, "update failed")
+			message := models.Update_error()
+			utils.SentMessage(response, message)
 		} else {
-			utils.SentNewMessage(response, true, "update success")
+			message := models.Update_error()
+			utils.SentMessage(response, message)
 		}
 	}
 }
@@ -83,8 +87,10 @@ func DelHuman(response http.ResponseWriter, request *http.Request) {
 	objID, _ := primitive.ObjectIDFromHex(id)
 	err := repository.DeleteHuman(objID)
 	if err != nil {
-		utils.SentNewMessage(response, false, "delete failed")
+		message := models.Delete_error()
+		utils.SentMessage(response, message)
 	} else {
-		utils.SentNewMessage(response, true, "delete success")
+		message := models.Delete_success()
+		utils.SentMessage(response, message)
 	}
 }
