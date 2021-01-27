@@ -154,8 +154,8 @@ func Update_error() Constants {
 	return Constants{
 		false,
 		message{
-			"แก้ไขข้อมูลผิดพลาด",
-			"update error",
+			"บันทึกข้อมูลผิดพลาด",
+			"save data error",
 			"",
 		},
 	}
@@ -165,8 +165,8 @@ func Update_success() Constants {
 	return Constants{
 		true,
 		message{
-			"แก้ไขข้อมูลสำเร็จ",
-			"update success",
+			"บันทึกข้อมูลสำเร็จ",
+			"save data success",
 			"",
 		},
 	}
