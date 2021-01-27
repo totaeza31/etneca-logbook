@@ -44,10 +44,11 @@ func PostHuman(response http.ResponseWriter, request *http.Request) {
 
 	err = repository.InsertHuman(human)
 	if err != nil {
-		utils.SentNewMessage(response, false, "can not save data")
+		message := models.Update_error()
+		utils.SentMessage2(response, message)
 	} else {
-		respond = models.Insert_success()
-		utils.SentNewMessage(response, true, "save data success")
+		message := models.Update_success()
+		utils.SentMessage2(response, message)
 	}
 }
 

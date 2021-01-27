@@ -23,11 +23,7 @@ func GetOwner(response http.ResponseWriter, request *http.Request) {
 		respond = models.Get_data_error()
 		utils.SentMessage(response, respond)
 	} else {
-		var message models.MessageAllOwner
-		message.AllOwner = allOwner
-		message.Result = true
-		message.Message = "get data success"
-		json.NewEncoder(response).Encode(message)
+		json.NewEncoder(response).Encode(allOwner.Owner)
 	}
 }
 
@@ -41,11 +37,7 @@ func GetOwnerByID(response http.ResponseWriter, request *http.Request) {
 		respond = models.Get_data_error()
 		utils.SentMessage(response, respond)
 	} else {
-		var message models.MessageOwner
-		message.Owner = owner
-		message.Result = true
-		message.Message = "get data success"
-		json.NewEncoder(response).Encode(message)
+		json.NewEncoder(response).Encode(owner)
 	}
 }
 
@@ -104,11 +96,11 @@ func PutOwner(response http.ResponseWriter, request *http.Request) {
 				owner.Birthday = ""
 				err = repository.UpdateOwer(owner, objID)
 				if err != nil {
-					respond = models.Update_success()
-					utils.SentMessage(response, respond)
+					// respond = models.Update_success()
+					// utils.SentMessage(response, respond)
 				} else {
-					respond = models.Update_success()
-					utils.SentMessage(response, respond)
+					// respond = models.Update_success()
+					// utils.SentMessage(response, respond)
 				}
 			}
 		}
@@ -159,11 +151,11 @@ func PatchOwnerCredit(response http.ResponseWriter, request *http.Request) {
 		json.NewDecoder(request.Body).Decode(&owner)
 		err = repository.UpadateOwnerCredit(owner.Credit, objID)
 		if err != nil {
-			respond = models.Update_error()
-			utils.SentMessage(response, respond)
+			// respond = models.Update_error()
+			// utils.SentMessage(response, respond)
 		} else {
-			respond = models.Update_success()
-			utils.SentMessage(response, respond)
+			// respond = models.Update_success()
+			// utils.SentMessage(response, respond)
 		}
 	}
 }

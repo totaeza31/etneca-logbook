@@ -5,6 +5,13 @@ type Constants struct {
 	Message message
 }
 
+type Constants2 struct {
+	Result bool   `json:"result"`
+	Th     string `json:"th"`
+	En     string `json:"en"`
+	Bu     string `json:"bu"`
+}
+
 type message struct {
 	Th string `json:"th"`
 	En string `json:"en"`
@@ -143,25 +150,21 @@ func Insert_success() Constants {
 	}
 }
 
-func Update_error() Constants {
-	return Constants{
+func Update_error() Constants2 {
+	return Constants2{
 		false,
-		message{
-			"แก้ไขข้อมูลผิดพลาด",
-			"update error",
-			"",
-		},
+		"แก้ไขข้อมูลผิดพลาด",
+		"update error",
+		"",
 	}
 }
 
-func Update_success() Constants {
-	return Constants{
+func Update_success() Constants2 {
+	return Constants2{
 		true,
-		message{
-			"แก้ไขข้อมูลสำเร็จ",
-			"update success",
-			"",
-		},
+		"แก้ไขข้อมูลสำเร็จ",
+		"update success",
+		"",
 	}
 }
 

@@ -143,8 +143,8 @@ func UpdateUser(response http.ResponseWriter, request *http.Request) {
 		if err != nil {
 			fmt.Println(err)
 		} else {
-			respond = models.Update_success()
-			utils.SentMessage(response, respond)
+			// respond = models.Update_success()
+			// utils.SentMessage(response, respond)
 		}
 	}
 }

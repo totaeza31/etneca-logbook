@@ -20,6 +20,8 @@ func IndexRoute() {
 
 	v1.AuthenRoute(router.PathPrefix("/v1").Subrouter())
 	v1.OwnerRoute(router.PathPrefix("/v1").Subrouter())
+	v1.TechnicianRoute(router.PathPrefix("/v1").Subrouter())
+	v1.BoatRoute(router.PathPrefix("/v1").Subrouter())
 
 	test.AuthenRoute(router.PathPrefix("/test").Subrouter())
 	test.OwnerRoute(router.PathPrefix("/test").Subrouter())
