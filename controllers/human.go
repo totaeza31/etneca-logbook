@@ -40,15 +40,20 @@ func PostHuman(response http.ResponseWriter, request *http.Request) {
 	var human models.Human
 	err := json.NewDecoder(request.Body).Decode(&human)
 	human.ID = primitive.NewObjectID()
-
-	err = repository.InsertHuman(human)
 	if err != nil {
 		message := models.Update_error()
 		utils.SentMessage(response, message)
 	} else {
-		message := models.Update_success()
-		utils.SentMessage(response, message)
+		err = repository.InsertHuman(human)
+		if err != nil {
+			message := models.Update_error()
+			utils.SentMessage(response, message)
+		} else {
+			message := models.Update_success()
+			utils.SentMessage(response, message)
+		}
 	}
+
 }
 
 func PutHuman(response http.ResponseWriter, request *http.Request) {
