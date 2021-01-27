@@ -14,7 +14,8 @@ type Boat struct {
 	ID            primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
 	BoatName      boatname           `json:"boatname" bson:"boatname"`
 	BoatReg       string             `json:"boat_reg" bson:"boat_reg"`
-	Grosstons     float64            `json:"telephone" bson:"telephone"`
+	Grosstons     float64            `json:"grosstons" bson:"grosstons"`
+	TypeBoat      typeBoat           `json:"typeBoat" bson:"typeBoat"`
 	Agent         agent              `json:"agent" bson:"agent"`
 	BoatMan       boatman            `json:"boatman" bson:"boatman"`
 	Address       address            `json:"address" bson:"address"`
@@ -46,6 +47,12 @@ type agent struct {
 }
 
 type boatman struct {
+	Th string `json:"th"`
+	En string `json:"en"`
+	Bu string `json:"bu"`
+}
+
+type typeBoat struct {
 	Th string `json:"th"`
 	En string `json:"en"`
 	Bu string `json:"bu"`

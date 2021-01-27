@@ -1,16 +1,16 @@
 package models
 
 type Constants struct {
-	Result  bool `json:"result"`
-	Message message
+	Result  bool    `json:"result"`
+	Message message `json:"message"`
 }
 
-type Constants2 struct {
-	Result bool   `json:"result"`
-	Th     string `json:"th"`
-	En     string `json:"en"`
-	Bu     string `json:"bu"`
-}
+// type Constants2 struct {
+// 	Result bool   `json:"result"`
+// 	Th     string `json:"th"`
+// 	En     string `json:"en"`
+// 	Bu     string `json:"bu"`
+// }
 
 type message struct {
 	Th string `json:"th"`
@@ -150,21 +150,25 @@ func Insert_success() Constants {
 	}
 }
 
-func Update_error() Constants2 {
-	return Constants2{
+func Update_error() Constants {
+	return Constants{
 		false,
-		"แก้ไขข้อมูลผิดพลาด",
-		"update error",
-		"",
+		message{
+			"แก้ไขข้อมูลผิดพลาด",
+			"update error",
+			"",
+		},
 	}
 }
 
-func Update_success() Constants2 {
-	return Constants2{
+func Update_success() Constants {
+	return Constants{
 		true,
-		"แก้ไขข้อมูลสำเร็จ",
-		"update success",
-		"",
+		message{
+			"แก้ไขข้อมูลสำเร็จ",
+			"update success",
+			"",
+		},
 	}
 }
 

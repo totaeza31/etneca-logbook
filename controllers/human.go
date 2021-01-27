@@ -18,7 +18,6 @@ func GetAllHuman(response http.ResponseWriter, request *http.Request) {
 	if err != nil {
 		utils.SentNewMessage(response, false, "can not found")
 	} else {
-
 		json.NewEncoder(response).Encode(allHuman.Human)
 	}
 }
@@ -45,10 +44,10 @@ func PostHuman(response http.ResponseWriter, request *http.Request) {
 	err = repository.InsertHuman(human)
 	if err != nil {
 		message := models.Update_error()
-		utils.SentMessage2(response, message)
+		utils.SentMessage(response, message)
 	} else {
 		message := models.Update_success()
-		utils.SentMessage2(response, message)
+		utils.SentMessage(response, message)
 	}
 }
 

@@ -63,14 +63,14 @@ func SentMessage(response http.ResponseWriter, message models.Constants) {
 	json.NewEncoder(response).Encode(message)
 }
 
-func SentMessage2(response http.ResponseWriter, message models.Constants2) {
+// func SentMessage2(response http.ResponseWriter, message models.Constants2) {
 
-	if message.En == "invalid syntax" {
-		response.WriteHeader(http.StatusBadRequest)
-	}
+// 	if message.En == "invalid syntax" {
+// 		response.WriteHeader(http.StatusBadRequest)
+// 	}
 
-	json.NewEncoder(response).Encode(message)
-}
+// 	json.NewEncoder(response).Encode(message)
+// }
 
 func Decrypt(password, hash string) error {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
