@@ -25,6 +25,7 @@ func GetAllHuman(response http.ResponseWriter, request *http.Request) {
 
 func GetHumanByID(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
+	response.Header().Set("Access-Control-Allow-Origin", "*")
 	param := mux.Vars(request)
 	id := param["id"]
 	objID, _ := primitive.ObjectIDFromHex(id)
@@ -60,6 +61,7 @@ func PostHuman(response http.ResponseWriter, request *http.Request) {
 
 func PutHuman(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
+	response.Header().Set("Access-Control-Allow-Origin", "*")
 	param := mux.Vars(request)
 	id := param["id"]
 	objID, _ := primitive.ObjectIDFromHex(id)
