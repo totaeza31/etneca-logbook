@@ -12,7 +12,7 @@ import (
 func FindAllHuman() (models.AllHuman, error) {
 	var allHuman models.AllHuman
 	var human models.Human
-
+	
 	db, err := driver.ConnectMongoHuman()
 	if err != nil {
 		return allHuman, err

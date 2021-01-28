@@ -7,9 +7,9 @@ import (
 )
 
 func BoatRoute(router *mux.Router) {
-	router.HandleFunc("/boat", controllers.VerifyAccess(controllers.GetTech)).Methods("GET")
-	router.HandleFunc("/boat/{id}", controllers.GetTechByID).Methods("GET")
-	router.HandleFunc("/boat", controllers.PostTech).Methods("POST")
-	router.HandleFunc("/boat/{id}", controllers.PutTech).Methods("PUT")
-	router.HandleFunc("/boat/{id}", controllers.DelTech).Methods("DELETE")
+	router.HandleFunc("/boat", controllers.VerifyAccess(controllers.GetAllBoat)).Methods("GET")
+	router.HandleFunc("/boat/{id}", controllers.GetBoatByID).Methods("GET")
+	router.HandleFunc("/boat", controllers.PostBoat).Methods("POST")
+	router.HandleFunc("/boat/{id}", controllers.PutBoat).Methods("PUT")
+	router.HandleFunc("/boat/{id}", controllers.DelBoat).Methods("DELETE")
 }

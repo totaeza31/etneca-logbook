@@ -11,7 +11,10 @@ require (
 	github.com/itrepablik/sulat v1.0.7
 	github.com/rs/cors v1.7.0
 	github.com/subosito/gotenv v1.2.0
+	github.com/zebresel-com/mongodm v2.0.1+incompatible
 	go.mongodb.org/mongo-driver v1.4.4
 	golang.org/x/crypto v0.0.0-20200604202706-70a84ac30bf9
+	golang.org/x/net v0.0.0-20200202094626-16171245cfb2
 	google.golang.org/genproto v0.0.0-20210119180700-e258113e47cc
+	gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22
 )
