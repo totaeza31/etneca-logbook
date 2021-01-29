@@ -26,6 +26,11 @@ func IndexRoute() {
 	test.AuthenRoute(router.PathPrefix("/test").Subrouter())
 	test.OwnerRoute(router.PathPrefix("/test").Subrouter())
 
-	handler := cors.Default().Handler(router)
+	cors := cors.New(cors.Options{
+		AllowedOrigins:   []string{"elogbook-etneca.herokuapp.com"},
+		AllowedMethods:   []string{http.MethodGet, http.MethodPost, http.MethodDelete, http.MethodPut, http.MethodPatch},
+		AllowCredentials: true,
+	})
+	handler := cors.Handler(router)
 	http.ListenAndServe(":"+os.Getenv("PORT"), handler)
 }

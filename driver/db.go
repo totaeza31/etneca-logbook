@@ -82,7 +82,7 @@ func ConnectMongoHuman() (*mongo.Collection, error) {
 func ConnectMongoBoat() (*mongo.Collection, error) {
 	clientOptions := options.Client().ApplyURI(os.Getenv("BO_DB"))
 	client, err := mongo.Connect(context.TODO(), clientOptions)
-	
+
 	if err != nil {
 		return nil, err
 	}
@@ -93,7 +93,7 @@ func ConnectMongoBoat() (*mongo.Collection, error) {
 }
 
 func ConnectMongoDM() {
-	
+
 }
 
 func ConnectRedis() (*redis.Client, error) {

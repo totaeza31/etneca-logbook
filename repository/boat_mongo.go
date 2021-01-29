@@ -4,9 +4,11 @@ import (
 	"context"
 	"etneca-logbook/driver"
 	"etneca-logbook/models"
+	"fmt"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 func FindAllBoat() (models.AllBoats, error) {
@@ -32,7 +34,18 @@ func FindAllBoat() (models.AllBoats, error) {
 }
 
 func FindBoat(id primitive.ObjectID) (models.Boat, error) {
+	lookupStage := bson.D{{"$lookup", bson.D{{"from", "boatBeamStatus"}, {"localField", "BoatBeam"}, {"foreignField", "_id"}, {"as", "BoatBeam"}}}}
+	unwindStage := bson.D{{"$unwind", bson.D{{"path", "$boatBeamStatus"}, {"preserveNullAndEmptyArrays", false}}}}
 	db, err := driver.ConnectMongoBoat()
+	wLoadedStructCursor, err := db.Aggregate(context.TODO(), mongo.Pipeline{lookupStage, unwindStage})
+	fmt.Println("s------------------------------")
+	fmt.Println(wLoadedStructCursor)
+	fmt.Println(err)
+	var showsLoadedStruct models.Boat
+	if err = wLoadedStructCursor.All(context.TODO(), &showsLoadedStruct); err != nil {
+		panic(err)
+	}
+	fmt.Println(showsLoadedStruct)
 	var boat models.Boat
 	if err != nil {
 		return boat, err
