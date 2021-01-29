@@ -27,7 +27,6 @@ func IndexRoute() {
 	test.OwnerRoute(router.PathPrefix("/test").Subrouter())
 
 	cors := cors.New(cors.Options{
-		AllowedOrigins:   []string{"elogbook-etneca.herokuapp.com"},
 		AllowedMethods:   []string{http.MethodGet, http.MethodPost, http.MethodDelete, http.MethodPut, http.MethodPatch},
 		AllowCredentials: true,
 	})
