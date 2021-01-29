@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"etneca-logbook/driver"
+	"etneca-logbook/helpers"
 	"etneca-logbook/models"
 	"fmt"
 
@@ -33,28 +34,26 @@ func FindAllBoat() (models.AllBoats, error) {
 	return allboat, nil
 }
 
-func FindBoat(id primitive.ObjectID) (models.Boat, error) {
-	lookupStage := bson.D{{"$lookup", bson.D{{"from", "boatBeamStatus"}, {"localField", "BoatBeam"}, {"foreignField", "_id"}, {"as", "BoatBeam"}}}}
-	unwindStage := bson.D{{"$unwind", bson.D{{"path", "$boatBeamStatus"}, {"preserveNullAndEmptyArrays", false}}}}
+func FindBoat(id primitive.ObjectID) (models.Boats, error) {
+	var boat models.Boats
 	db, err := driver.ConnectMongoBoat()
-	wLoadedStructCursor, err := db.Aggregate(context.TODO(), mongo.Pipeline{lookupStage, unwindStage})
-	fmt.Println("s------------------------------")
-	fmt.Println(wLoadedStructCursor)
-	fmt.Println(err)
-	var showsLoadedStruct models.Boat
-	if err = wLoadedStructCursor.All(context.TODO(), &showsLoadedStruct); err != nil {
-		panic(err)
+	boatBeamStage := bson.D{{"$lookup", bson.D{{"from", "boatBeamStatus"}, {"localField", "boatBeamStatus"}, {"foreignField", "_id"}, {"as", "boatBeamStatus"}}}}
+	vmsGenStage := bson.D{{"$lookup", bson.D{{"from", "boatVmsGen"}, {"localField", "vmsGen"}, {"foreignField", "_id"}, {"as", "vmsGen"}}}}
+	gatewayStage := bson.D{{"$lookup", bson.D{{"from", "boatGateway"}, {"localField", "gateway"}, {"foreignField", "_id"}, {"as", "gateway"}}}}
+	boatTypeStage := bson.D{{"$lookup", bson.D{{"from", "boatType"}, {"localField", "boatType"}, {"foreignField", "_id"}, {"as", "boatType"}}}}
+	deviceStatusStage := bson.D{{"$lookup", bson.D{{"from", "boatDeviceStatus"}, {"localField", "deviceStatus"}, {"foreignField", "_id"}, {"as", "deviceStatus"}}}}
+	financialStatusStage := bson.D{{"$lookup", bson.D{{"from", "boatFinancialStatus"}, {"localField", "financialStatus"}, {"foreignField", "_id"}, {"as", "financialStatus"}}}}
+	LoadedStructCursor, err := db.Aggregate(context.TODO(), mongo.Pipeline{boatBeamStage, vmsGenStage, gatewayStage, boatTypeStage, deviceStatusStage, financialStatusStage})
+	fmt.Println(LoadedStructCursor)
+	var showsLoadedStruct []bson.M
+	if err = LoadedStructCursor.All(context.TODO(), &showsLoadedStruct); err != nil {
+		return boat, err
 	}
 	fmt.Println(showsLoadedStruct)
-	var boat models.Boat
-	if err != nil {
-		return boat, err
-	}
-	err = db.FindOne(context.TODO(), bson.M{"_id": id}).Decode(&boat)
-	if err != nil {
-		return boat, err
-	}
-	return boat, nil
+	bsonBytes, _ := bson.Marshal(showsLoadedStruct[0])
+	boats := <-helpers.UnmarshalData(bsonBytes, boat)
+	fmt.Println(boats)
+	return boats, nil
 }
 
 func InsertBoat(boat models.Boat) error {

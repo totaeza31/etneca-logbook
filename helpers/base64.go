@@ -3,16 +3,18 @@ package helpers
 import (
 	"bytes"
 	"encoding/base64"
+	"etneca-logbook/models"
 	"image"
 	"image/gif"
 	"image/jpeg"
 	"image/png"
 	"os"
 	"strings"
+
+	"gopkg.in/mgo.v2/bson"
 )
 
 func SavePicture(b64 string, id string) (string, error) {
-
 	idx := strings.Index(b64, ";base64,")
 	if idx < 0 {
 		panic("InvalidImage")
@@ -126,4 +128,14 @@ func encodeGif(f *os.File, im image.Image) <-chan error {
 		r <- err
 	}()
 	return r
+}
+
+func UnmarshalData(bytes []byte, model models.Boats) <-chan models.Boats {
+	models := make(chan models.Boats)
+	go func() {
+		defer close(models)
+		bson.Unmarshal(bytes, &model)
+		models <- model
+	}()
+	return models
 }

@@ -37,9 +37,9 @@ func GetBoatByID(response http.ResponseWriter, request *http.Request) {
 		message := models.Get_data_error()
 		utils.SentMessage(response, message)
 	} else {
-		boat.Anniversary = boat.Anniversary_date.Format("2006-01-02")
-		boat.WarrantyExp = boat.WarrantyExp_date.Format("2006-01-02")
-		boat.ReportDate = boat.ReportDate_date.Format("2006-01-02")
+		// boat.Anniversary = boat.Anniversary_date.Format("2006-01-02")
+		// boat.WarrantyExp = boat.WarrantyExp_date.Format("2006-01-02")
+		// boat.ReportDate = boat.ReportDate_date.Format("2006-01-02")
 		json.NewEncoder(response).Encode(boat)
 	}
 }

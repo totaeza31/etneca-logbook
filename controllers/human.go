@@ -76,7 +76,7 @@ func PutHuman(response http.ResponseWriter, request *http.Request) {
 			message := models.Update_error()
 			utils.SentMessage(response, message)
 		} else {
-			message := models.Update_error()
+			message := models.Update_success()
 			utils.SentMessage(response, message)
 		}
 	}
