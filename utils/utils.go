@@ -62,8 +62,6 @@ func SentMessage(response http.ResponseWriter, message models.Constants) {
 		response.WriteHeader(http.StatusUnauthorized)
 	} else if message.Message.En == "token not found" {
 		response.WriteHeader(http.StatusNotFound)
-	} else if message.Message.En == "user not found" {
-		response.WriteHeader(http.StatusNotFound)
 	}
 
 	json.NewEncoder(response).Encode(message)

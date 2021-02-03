@@ -183,7 +183,6 @@ func ConnectMongoBoatVgm() (*mongo.Collection, error) {
 	return collection, nil
 }
 
-
 func ConnectMongoGoods() (*mongo.Collection, error) {
 	clientOptions := options.Client().ApplyURI(os.Getenv("BO_DB"))
 	client, err := mongo.Connect(context.TODO(), clientOptions)
@@ -193,6 +192,19 @@ func ConnectMongoGoods() (*mongo.Collection, error) {
 	}
 
 	collection := client.Database("back_office").Collection("goods")
+
+	return collection, nil
+}
+
+func ConnectMongoWorksheet() (*mongo.Collection, error) {
+	clientOptions := options.Client().ApplyURI(os.Getenv("BO_DB"))
+	client, err := mongo.Connect(context.TODO(), clientOptions)
+
+	if err != nil {
+		return nil, err
+	}
+
+	collection := client.Database("back_office").Collection("worksheet")
 
 	return collection, nil
 }
