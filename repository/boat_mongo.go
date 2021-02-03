@@ -114,3 +114,16 @@ func FindBoatByName(text string) (models.AllBoats, error) {
 
 	return allboat, nil
 }
+
+func FindBoatDeviceNumber(deviceNumber string) (models.Boat, error) {
+	var boat models.Boat
+	db, err := driver.ConnectMongoBoat()
+	if err != nil {
+		return boat, err
+	}
+	err = db.FindOne(context.TODO(), bson.M{"deviceNumber": deviceNumber}).Decode(&boat)
+	if err != nil {
+		return boat, err
+	}
+	return boat, nil
+}

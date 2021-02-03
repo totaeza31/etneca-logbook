@@ -4,27 +4,33 @@ import (
 	"context"
 	"etneca-logbook/driver"
 	"etneca-logbook/models"
-	"fmt"
+	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func FindAllWorksheet() (models.AllWorkSheet, error) {
-	var allWorkSheet models.AllWorkSheet
-	var worksheet models.WorkSheet
+func FindAllWorksheet() ([]models.WorkSheetRespond, error) {
+	var allWorkSheet []models.WorkSheetRespond
+	var worksheet models.WorkSheetRespond
 
 	db, err := driver.ConnectMongoWorksheet()
 	if err != nil {
 		return allWorkSheet, err
 	}
-	cur, err := db.Find(context.TODO(), bson.D{{}})
+	techState := bson.D{{"$lookup", bson.D{{"from", "tech"}, {"localField", "company"}, {"foreignField", "company"}, {"as", "techDetail"}}}}
+	boatState := bson.D{{"$lookup", bson.D{{"from", "boat"}, {"localField", "deviceNumber"}, {"foreignField", "deviceNumber"}, {"as", "boatDetail"}}}}
+	cur, err := db.Aggregate(context.TODO(), mongo.Pipeline{techState, boatState})
 	if err != nil {
 		return allWorkSheet, err
 	}
 	for cur.Next(context.Background()) {
+
 		err = cur.Decode(&worksheet)
-		allWorkSheet.WorkSheet = append(allWorkSheet.WorkSheet, worksheet)
+		worksheet.BoatName = worksheet.BoatDevice[0].Name
+		worksheet.Telephone = worksheet.TechDetail[0].Telephone
+		allWorkSheet = append(allWorkSheet, worksheet)
 	}
 	return allWorkSheet, nil
 }
@@ -44,11 +50,8 @@ func FindWorksheet(id primitive.ObjectID) (models.Tech, error) {
 
 func InsertWorksheet(workSheet models.WorkSheet) error {
 	collection, err := driver.ConnectMongoWorksheet()
-	tech, err := FindTechName(workSheet.Company)
-	if err != nil {
-		return err
-	}
-	fmt.Println(tech.ID)
+
+	workSheet.Time = time.Now()
 	_, err = collection.InsertOne(context.Background(), workSheet)
 	if err != nil {
 		return err
@@ -56,10 +59,10 @@ func InsertWorksheet(workSheet models.WorkSheet) error {
 	return nil
 }
 
-func UpdateWorksheet(tech models.Tech, id primitive.ObjectID) error {
+func UpdateWorksheet(workSheet models.WorkSheet, id primitive.ObjectID) error {
 	db, err := driver.ConnectMongoWorksheet()
 	filter := bson.D{{"_id", id}}
-	update := bson.D{{"$set", tech}}
+	update := bson.D{{"$set", workSheet}}
 	_, err = db.UpdateOne(
 		context.Background(),
 		filter,

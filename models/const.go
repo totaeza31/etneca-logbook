@@ -172,6 +172,17 @@ func Update_error() Constants {
 	}
 }
 
+func Data_not_found() Constants {
+	return Constants{
+		false,
+		message{
+			"ไม่พบข้อมูล",
+			"data not found",
+			"",
+		},
+	}
+}
+
 func Update_success() Constants {
 	return Constants{
 		true,

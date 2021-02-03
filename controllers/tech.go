@@ -41,16 +41,21 @@ func PostTech(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 	var tech models.Tech
 	err := json.NewDecoder(request.Body).Decode(&tech)
-	tech.ID = primitive.NewObjectID()
-
-	err = repository.InsertTech(tech)
 	if err != nil {
-		message := models.Update_error()
+		message := models.Invalid_syntax()
 		utils.SentMessage(response, message)
 	} else {
-		message := models.Update_success()
-		utils.SentMessage(response, message)
+		tech.ID = primitive.NewObjectID()
+		err = repository.InsertTech(tech)
+		if err != nil {
+			message := models.Update_error()
+			utils.SentMessage(response, message)
+		} else {
+			message := models.Update_success()
+			utils.SentMessage(response, message)
+		}
 	}
+
 }
 
 func PutTech(response http.ResponseWriter, request *http.Request) {

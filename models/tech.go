@@ -11,7 +11,6 @@ type Tech struct {
 	Company   string             `json:"company" bson:"company"`
 	Firstname string             `json:"firstname" bson:"firstname"`
 	Lastname  string             `json:"lastname" bson:"lastname"`
-	Nickname  string             `json:"nickname" bson:"nickname"`
 	Telephone []string           `json:"telephone" bson:"telephone"`
 	Address   string             `json:"address" bson:"address"`
 	Email     string             `json:"email" bson:"email"`

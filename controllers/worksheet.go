@@ -14,13 +14,13 @@ import (
 
 func GetAllWorksheet(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
-	_, err := repository.FindAllWorksheet()
+	get, err := repository.FindAllWorksheet()
 
 	if err != nil {
 		message := models.Get_data_error()
 		utils.SentMessage(response, message)
 	} else {
-		// json.NewEncoder(response).Encode(allBoatsDevice.BoatDevice)
+		json.NewEncoder(response).Encode(get)
 	}
 }
 
@@ -46,13 +46,25 @@ func PostWorksheet(response http.ResponseWriter, request *http.Request) {
 		message := models.Invalid_syntax()
 		utils.SentMessage(response, message)
 	} else {
-		err = repository.InsertWorksheet(workSheet)
+		_, err = repository.FindBoatDeviceNumber(workSheet.DeviceNumber)
 		if err != nil {
-			message := models.Update_error()
+			message := models.Data_not_found()
 			utils.SentMessage(response, message)
 		} else {
-			message := models.Update_success()
-			utils.SentMessage(response, message)
+			_, err = repository.FindTechName(workSheet.Company)
+			if err != nil {
+				message := models.Data_not_found()
+				utils.SentMessage(response, message)
+			} else {
+				err = repository.InsertWorksheet(workSheet)
+				if err != nil {
+					message := models.Update_error()
+					utils.SentMessage(response, message)
+				} else {
+					message := models.Update_success()
+					utils.SentMessage(response, message)
+				}
+			}
 		}
 	}
 }
