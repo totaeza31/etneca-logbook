@@ -1,16 +1,18 @@
 package models
 
-import "go.mongodb.org/mongo-driver/bson/primitive"
+import (
+	"time"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
+)
 
 type AllWorkSheet struct {
-	Goods []Goods `json:""`
+	WorkSheet []WorkSheet `json:""`
 }
 
 type WorkSheet struct {
-	Id          primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
-	Company     string             `json:"company" bson:"company"`
-	ReceiptCode string             `json:"receiptCode" bson:"receiptCode"`
-	Name        string             `json:"name" bson:"name"`
-	Cost        int64              `json:"cost" bson:"cost"`
-	Remark      string             `json:"remark" bson:"remark"`
+	Id      primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
+	Company string             `json:"company" bson:"company"`
+	Status  primitive.ObjectID `json:"status" bson:"status"`
+	Time    time.Time          `json:"StartDate" bson:"StartDate"`
 }

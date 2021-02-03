@@ -41,6 +41,19 @@ func FindTech(id primitive.ObjectID) (models.Tech, error) {
 	return tech, nil
 }
 
+func FindTechName(company string) (models.Tech, error) {
+	db, err := driver.ConnectMongoTech()
+	var tech models.Tech
+	if err != nil {
+		return tech, err
+	}
+	err = db.FindOne(context.TODO(), bson.M{"company": company}).Decode(&tech)
+	if err != nil {
+		return tech, err
+	}
+	return tech, nil
+}
+
 func InsertTech(tech models.Tech) error {
 	collection, err := driver.ConnectMongoTech()
 	if err != nil {

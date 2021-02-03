@@ -4,28 +4,29 @@ import (
 	"context"
 	"etneca-logbook/driver"
 	"etneca-logbook/models"
+	"fmt"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func FindAllWorksheet() (models.AllTech, error) {
-	var allTech models.AllTech
-	var tech models.Tech
+func FindAllWorksheet() (models.AllWorkSheet, error) {
+	var allWorkSheet models.AllWorkSheet
+	var worksheet models.WorkSheet
 
 	db, err := driver.ConnectMongoWorksheet()
 	if err != nil {
-		return allTech, err
+		return allWorkSheet, err
 	}
 	cur, err := db.Find(context.TODO(), bson.D{{}})
 	if err != nil {
-		return allTech, err
+		return allWorkSheet, err
 	}
 	for cur.Next(context.Background()) {
-		err = cur.Decode(&tech)
-		allTech.Tech = append(allTech.Tech, tech)
+		err = cur.Decode(&worksheet)
+		allWorkSheet.WorkSheet = append(allWorkSheet.WorkSheet, worksheet)
 	}
-	return allTech, nil
+	return allWorkSheet, nil
 }
 
 func FindWorksheet(id primitive.ObjectID) (models.Tech, error) {
@@ -41,12 +42,14 @@ func FindWorksheet(id primitive.ObjectID) (models.Tech, error) {
 	return tech, nil
 }
 
-func InsertWorksheet(tech models.Tech) error {
+func InsertWorksheet(workSheet models.WorkSheet) error {
 	collection, err := driver.ConnectMongoWorksheet()
+	tech, err := FindTechName(workSheet.Company)
 	if err != nil {
 		return err
 	}
-	_, err = collection.InsertOne(context.Background(), tech)
+	fmt.Println(tech.ID)
+	_, err = collection.InsertOne(context.Background(), workSheet)
 	if err != nil {
 		return err
 	}

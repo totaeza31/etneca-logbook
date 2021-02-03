@@ -5,7 +5,6 @@ import (
 	"etneca-logbook/models"
 	"etneca-logbook/repository"
 	"etneca-logbook/utils"
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -29,7 +28,6 @@ var token Token
 
 func Login(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
-	fmt.Println("hello")
 	var authen models.Authen
 	err := json.NewDecoder(request.Body).Decode(&authen)
 	if err != nil || authen.Email == "" || authen.Password == "" {
@@ -39,12 +37,12 @@ func Login(response http.ResponseWriter, request *http.Request) {
 		var password = authen.Password
 		authen, err = repository.FindEmail(authen.Email)
 		if err != nil {
-			respond = models.User_not_found()
+			respond = models.Email_invalid()
 			utils.SentMessage(response, respond)
 		} else {
 			err = utils.Decrypt(password, authen.Password)
 			if err != nil {
-				respond = models.User_not_found()
+				respond = models.Password_invalid()
 				utils.SentMessage(response, respond)
 			} else {
 				authen.AccessToken, err = utils.GenerateToken(authen, "access")

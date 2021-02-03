@@ -40,6 +40,28 @@ func User_not_found() Constants {
 	}
 }
 
+func Email_invalid() Constants {
+	return Constants{
+		false,
+		message{
+			"อีเมลล์ไม่ถูกต้อง",
+			"Invalid e-mail",
+			"",
+		},
+	}
+}
+
+func Password_invalid() Constants {
+	return Constants{
+		false,
+		message{
+			"พาสเวิร์ดไม่ถูกต้อง",
+			"Invalid password",
+			"",
+		},
+	}
+}
+
 func Invalid_token() Constants {
 	return Constants{
 		false,
@@ -61,8 +83,6 @@ func Token_expired() Constants {
 		},
 	}
 }
-
-
 
 func Token_not_found() Constants {
 	return Constants{
@@ -173,8 +193,6 @@ func Update_success() Constants {
 		},
 	}
 }
-
-
 
 func Edit_error() Constants {
 	return Constants{

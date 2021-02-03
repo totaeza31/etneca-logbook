@@ -14,14 +14,14 @@ import (
 
 func GetAllWorksheet(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
-	// allBoatsDevice, err := repository.FindAllWorksheet()
+	_, err := repository.FindAllWorksheet()
 
-	// if err != nil {
-	// 	message := models.Get_data_error()
-	// 	utils.SentMessage(response, message)
-	// } else {
-	// 	// json.NewEncoder(response).Encode(allBoatsDevice.BoatDevice)
-	// }
+	if err != nil {
+		message := models.Get_data_error()
+		utils.SentMessage(response, message)
+	} else {
+		// json.NewEncoder(response).Encode(allBoatsDevice.BoatDevice)
+	}
 }
 
 func GetWorksheetByID(response http.ResponseWriter, request *http.Request) {
@@ -40,13 +40,13 @@ func GetWorksheetByID(response http.ResponseWriter, request *http.Request) {
 
 func PostWorksheet(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
-	var boatDevice models.BoatDevice
-	err := json.NewDecoder(request.Body).Decode(&boatDevice)
+	var workSheet models.WorkSheet
+	err := json.NewDecoder(request.Body).Decode(&workSheet)
 	if err != nil {
 		message := models.Invalid_syntax()
 		utils.SentMessage(response, message)
 	} else {
-		// err = repository.InsertWorksheet(boatDevice)
+		err = repository.InsertWorksheet(workSheet)
 		if err != nil {
 			message := models.Update_error()
 			utils.SentMessage(response, message)
