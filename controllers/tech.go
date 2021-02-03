@@ -5,6 +5,7 @@ import (
 	"etneca-logbook/models"
 	"etneca-logbook/repository"
 	"etneca-logbook/utils"
+	"fmt"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -29,6 +30,7 @@ func GetTechByID(response http.ResponseWriter, request *http.Request) {
 	objID, _ := primitive.ObjectIDFromHex(id)
 	tech, err := repository.FindTech(objID)
 	if err != nil {
+		fmt.Println(err)
 		utils.SentNewMessage(response, false, "can not found")
 	} else {
 		json.NewEncoder(response).Encode(tech)

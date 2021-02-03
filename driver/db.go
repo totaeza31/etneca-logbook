@@ -53,6 +53,19 @@ func ConnectMongoBO() (*mongo.Collection, error) {
 	return collection, nil
 }
 
+func ConnectMongoReport() (*mongo.Collection, error) {
+	clientOptions := options.Client().ApplyURI(os.Getenv("BO_DB"))
+	client, err := mongo.Connect(context.TODO(), clientOptions)
+
+	if err != nil {
+		return nil, err
+	}
+
+	collection := client.Database("back_office").Collection("report")
+
+	return collection, nil
+}
+
 func ConnectMongoTech() (*mongo.Collection, error) {
 	clientOptions := options.Client().ApplyURI(os.Getenv("BO_DB"))
 	client, err := mongo.Connect(context.TODO(), clientOptions)
@@ -92,8 +105,96 @@ func ConnectMongoBoat() (*mongo.Collection, error) {
 	return collection, nil
 }
 
-func ConnectMongoDM() {
+func ConnectMongoBoatType() (*mongo.Collection, error) {
+	clientOptions := options.Client().ApplyURI(os.Getenv("BO_DB"))
+	client, err := mongo.Connect(context.TODO(), clientOptions)
 
+	if err != nil {
+		return nil, err
+	}
+
+	collection := client.Database("back_office").Collection("boatType")
+
+	return collection, nil
+}
+
+func ConnectMongoBoatBeam() (*mongo.Collection, error) {
+	clientOptions := options.Client().ApplyURI(os.Getenv("BO_DB"))
+	client, err := mongo.Connect(context.TODO(), clientOptions)
+
+	if err != nil {
+		return nil, err
+	}
+
+	collection := client.Database("back_office").Collection("boatBeamStatus")
+
+	return collection, nil
+}
+
+func ConnectMongoBoatDevice() (*mongo.Collection, error) {
+	clientOptions := options.Client().ApplyURI(os.Getenv("BO_DB"))
+	client, err := mongo.Connect(context.TODO(), clientOptions)
+
+	if err != nil {
+		return nil, err
+	}
+
+	collection := client.Database("back_office").Collection("boatDeviceStatus")
+
+	return collection, nil
+}
+
+func ConnectMongoBoatFinance() (*mongo.Collection, error) {
+	clientOptions := options.Client().ApplyURI(os.Getenv("BO_DB"))
+	client, err := mongo.Connect(context.TODO(), clientOptions)
+
+	if err != nil {
+		return nil, err
+	}
+
+	collection := client.Database("back_office").Collection("boatFinancialStatus")
+
+	return collection, nil
+}
+
+func ConnectMongoBoatGateway() (*mongo.Collection, error) {
+	clientOptions := options.Client().ApplyURI(os.Getenv("BO_DB"))
+	client, err := mongo.Connect(context.TODO(), clientOptions)
+
+	if err != nil {
+		return nil, err
+	}
+
+	collection := client.Database("back_office").Collection("boatGateway")
+
+	return collection, nil
+}
+
+func ConnectMongoBoatVgm() (*mongo.Collection, error) {
+	clientOptions := options.Client().ApplyURI(os.Getenv("BO_DB"))
+	client, err := mongo.Connect(context.TODO(), clientOptions)
+
+	if err != nil {
+		return nil, err
+	}
+
+	collection := client.Database("back_office").Collection("boatVmsGen")
+
+	return collection, nil
+}
+
+
+func ConnectMongoGoods() (*mongo.Collection, error) {
+	clientOptions := options.Client().ApplyURI(os.Getenv("BO_DB"))
+	client, err := mongo.Connect(context.TODO(), clientOptions)
+
+	if err != nil {
+		return nil, err
+	}
+
+	collection := client.Database("back_office").Collection("goods")
+
+	return collection, nil
 }
 
 func ConnectRedis() (*redis.Client, error) {

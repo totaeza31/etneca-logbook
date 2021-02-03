@@ -8,19 +8,12 @@ type AllTech struct {
 
 type Tech struct {
 	ID        primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
-	Company   company            `json:"company" bson:"company"`
-	Firstname firstName          `json:"firstname" bson:"firstname"`
-	Lastname  lastName           `json:"lastname" bson:"lastname"`
-	Nickname  nickname           `json:"nickname" bson:"nickname"`
-	Telephone []string          `json:"telephone" bson:"telephone"`
-	Address   address            `json:"address" bson:"address"`
-	Remark    remark             `json:"remark" bson:"remark"`
+	Company   string             `json:"company" bson:"company"`
+	Firstname string             `json:"firstname" bson:"firstname"`
+	Lastname  string             `json:"lastname" bson:"lastname"`
+	Nickname  string             `json:"nickname" bson:"nickname"`
+	Telephone []string           `json:"telephone" bson:"telephone"`
+	Address   string             `json:"address" bson:"address"`
+	Email     string             `json:"email" bson:"email"`
+	Remark    string             `json:"remark" bson:"remark"`
 }
-
-type nickname struct {
-	Th string `json:"th"`
-	En string `json:"en"`
-	Bu string `json:"bu"`
-}
-
-

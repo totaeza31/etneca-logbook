@@ -7,7 +7,7 @@ import (
 )
 
 func TechnicianRoute(router *mux.Router) {
-	router.HandleFunc("/tech", controllers.VerifyAccess(controllers.GetTech)).Methods("GET")
+	router.HandleFunc("/tech", controllers.GetTech).Methods("GET")
 	router.HandleFunc("/tech/{id}", controllers.GetTechByID).Methods("GET")
 	router.HandleFunc("/tech", controllers.PostTech).Methods("POST")
 	router.HandleFunc("/tech/{id}", controllers.PutTech).Methods("PUT")

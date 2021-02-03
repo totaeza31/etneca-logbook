@@ -58,19 +58,16 @@ func SentMessage(response http.ResponseWriter, message models.Constants) {
 
 	if message.Message.En == "invalid syntax" {
 		response.WriteHeader(http.StatusBadRequest)
+	} else if message.Message.En == "token expired" {
+		response.WriteHeader(http.StatusUnauthorized)
+	} else if message.Message.En == "token not found" {
+		response.WriteHeader(http.StatusNotFound)
+	} else if message.Message.En == "user not found" {
+		response.WriteHeader(http.StatusNotFound)
 	}
 
 	json.NewEncoder(response).Encode(message)
 }
-
-// func SentMessage2(response http.ResponseWriter, message models.Constants2) {
-
-// 	if message.En == "invalid syntax" {
-// 		response.WriteHeader(http.StatusBadRequest)
-// 	}
-
-// 	json.NewEncoder(response).Encode(message)
-// }
 
 func Decrypt(password, hash string) error {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
@@ -88,10 +85,10 @@ func GenerateToken(authen models.Authen, types string) (string, error) {
 
 	if types == "access" {
 		secret = os.Getenv("ACCESS_TOKEN")
-		expires = time.Now().Add(time.Minute * 30).Unix()
+		expires = time.Now().Add(time.Minute * 3).Unix()
 	} else if types == "refresh" {
 		secret = os.Getenv("REFRESH_TOKEN")
-		expires = time.Now().Add(time.Minute * 60 * 12).Unix()
+		expires = time.Now().Add(time.Minute * 6).Unix()
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{

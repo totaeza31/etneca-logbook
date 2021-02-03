@@ -96,11 +96,11 @@ func PutOwner(response http.ResponseWriter, request *http.Request) {
 				owner.Birthday = ""
 				err = repository.UpdateOwer(owner, objID)
 				if err != nil {
-					// respond = models.Update_success()
-					// utils.SentMessage(response, respond)
+					respond = models.Edit_error()
+					utils.SentMessage(response, respond)
 				} else {
-					// respond = models.Update_success()
-					// utils.SentMessage(response, respond)
+					respond = models.Edit_success()
+					utils.SentMessage(response, respond)
 				}
 			}
 		}
@@ -151,11 +151,11 @@ func PatchOwnerCredit(response http.ResponseWriter, request *http.Request) {
 		json.NewDecoder(request.Body).Decode(&owner)
 		err = repository.UpadateOwnerCredit(owner.Credit, objID)
 		if err != nil {
-			// respond = models.Update_error()
-			// utils.SentMessage(response, respond)
+			respond = models.Edit_error()
+			utils.SentMessage(response, respond)
 		} else {
-			// respond = models.Update_success()
-			// utils.SentMessage(response, respond)
+			respond = models.Edit_success()
+			utils.SentMessage(response, respond)
 		}
 	}
 }
