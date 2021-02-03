@@ -5,7 +5,6 @@ import (
 	"etneca-logbook/models"
 	"etneca-logbook/repository"
 	"etneca-logbook/utils"
-	"fmt"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -16,7 +15,8 @@ func GetTech(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 	allTech, err := repository.FindAllTech()
 	if err != nil {
-		utils.SentNewMessage(response, false, "can not found")
+		message := models.Get_data_error()
+		utils.SentMessage(response, message)
 	} else {
 
 		json.NewEncoder(response).Encode(allTech.Tech)
@@ -30,8 +30,8 @@ func GetTechByID(response http.ResponseWriter, request *http.Request) {
 	objID, _ := primitive.ObjectIDFromHex(id)
 	tech, err := repository.FindTech(objID)
 	if err != nil {
-		fmt.Println(err)
-		utils.SentNewMessage(response, false, "can not found")
+		message := models.Get_data_error()
+		utils.SentMessage(response, message)
 	} else {
 		json.NewEncoder(response).Encode(tech)
 	}
@@ -45,10 +45,11 @@ func PostTech(response http.ResponseWriter, request *http.Request) {
 
 	err = repository.InsertTech(tech)
 	if err != nil {
-		utils.SentNewMessage(response, false, "can not save data")
+		message := models.Update_error()
+		utils.SentMessage(response, message)
 	} else {
-		respond = models.Insert_success()
-		utils.SentNewMessage(response, true, "save data success")
+		message := models.Update_success()
+		utils.SentMessage(response, message)
 	}
 }
 
@@ -59,15 +60,18 @@ func PutTech(response http.ResponseWriter, request *http.Request) {
 	objID, _ := primitive.ObjectIDFromHex(id)
 	_, err := repository.FindTech(objID)
 	if err != nil {
-		utils.SentNewMessage(response, false, "id not found")
+		message := models.User_not_found()
+		utils.SentMessage(response, message)
 	} else {
 		var tech models.Tech
 		json.NewDecoder(request.Body).Decode(&tech)
 		err = repository.UpdateTech(tech, objID)
 		if err != nil {
-			utils.SentNewMessage(response, false, "update failed")
+			message := models.Edit_error()
+			utils.SentMessage(response, message)
 		} else {
-			utils.SentNewMessage(response, true, "update success")
+			message := models.Edit_success()
+			utils.SentMessage(response, message)
 		}
 	}
 }
@@ -79,8 +83,10 @@ func DelTech(response http.ResponseWriter, request *http.Request) {
 	objID, _ := primitive.ObjectIDFromHex(id)
 	err := repository.DeleteTech(objID)
 	if err != nil {
-		utils.SentNewMessage(response, false, "delete failed")
+		message := models.Delete_error()
+		utils.SentMessage(response, message)
 	} else {
-		utils.SentNewMessage(response, true, "delete success")
+		message := models.Delete_success()
+		utils.SentMessage(response, message)
 	}
 }
