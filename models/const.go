@@ -44,19 +44,8 @@ func Email_invalid() Constants {
 	return Constants{
 		false,
 		message{
-			"อีเมลล์ไม่ถูกต้อง",
-			"Invalid e-mail",
-			"",
-		},
-	}
-}
-
-func Password_invalid() Constants {
-	return Constants{
-		false,
-		message{
-			"พาสเวิร์ดไม่ถูกต้อง",
-			"Invalid password",
+			"อีเมลล์หรือพาสเวิร์ดไม่ถูกต้อง",
+			"Invalid e-mail or password",
 			"",
 		},
 	}

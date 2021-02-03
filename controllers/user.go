@@ -42,7 +42,7 @@ func Login(response http.ResponseWriter, request *http.Request) {
 		} else {
 			err = utils.Decrypt(password, authen.Password)
 			if err != nil {
-				respond = models.Password_invalid()
+				respond = models.Email_invalid()
 				utils.SentMessage(response, respond)
 			} else {
 				authen.AccessToken, err = utils.GenerateToken(authen, "access")
