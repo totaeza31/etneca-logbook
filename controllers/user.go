@@ -27,7 +27,9 @@ type link struct {
 var token Token
 
 func Login(response http.ResponseWriter, request *http.Request) {
+
 	response.Header().Add("content-type", "application/json")
+	response.Header().Set("Access-Control-Allow-Origin", "*")
 	var authen models.Authen
 	err := json.NewDecoder(request.Body).Decode(&authen)
 	if err != nil || authen.Email == "" || authen.Password == "" {
@@ -65,6 +67,7 @@ func Login(response http.ResponseWriter, request *http.Request) {
 func VerifyAccess(next http.HandlerFunc) http.HandlerFunc {
 	return http.HandlerFunc(func(response http.ResponseWriter, request *http.Request) {
 		response.Header().Add("content-type", "application/json")
+		response.Header().Set("Access-Control-Allow-Origin", "*")
 		authHeader := request.Header.Get("Authorization")
 		bearerToken := strings.Split(authHeader, " ")
 		if len(bearerToken) == 2 {
@@ -87,6 +90,7 @@ func VerifyAccess(next http.HandlerFunc) http.HandlerFunc {
 func VarifyRefresh(next http.HandlerFunc) http.HandlerFunc {
 	return http.HandlerFunc(func(response http.ResponseWriter, request *http.Request) {
 		response.Header().Add("content-type", "application/json")
+		response.Header().Set("Access-Control-Allow-Origin", "*")
 		json.NewDecoder(request.Body).Decode(&token)
 		tokenValid, _ := utils.ValidRefreshToken(token.Token)
 		if tokenValid.Valid {
@@ -121,6 +125,7 @@ func VarifyRefresh(next http.HandlerFunc) http.HandlerFunc {
 
 func Logout(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
+	response.Header().Set("Access-Control-Allow-Origin", "*")
 	json.NewDecoder(request.Body).Decode(&token)
 	tokenValid, _ := utils.ValidRefreshToken(token.Token)
 	if tokenValid.Valid {

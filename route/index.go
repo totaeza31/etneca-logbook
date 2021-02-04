@@ -40,6 +40,7 @@ func IndexRoute() {
 		AllowedMethods:   []string{http.MethodGet, http.MethodPost, http.MethodDelete, http.MethodPut, http.MethodPatch},
 		AllowCredentials: true,
 	})
+
 	handler := cors.Handler(router)
 	http.ListenAndServe(":"+os.Getenv("PORT"), handler)
 }
