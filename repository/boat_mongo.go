@@ -38,6 +38,7 @@ func FindBoat(id primitive.ObjectID) (models.Boat, error) {
 	if err != nil {
 		return boat, err
 	}
+	
 	err = db.FindOne(context.TODO(), bson.M{"_id": id}).Decode(&boat)
 	if err != nil {
 		return boat, err

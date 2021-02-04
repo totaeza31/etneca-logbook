@@ -4,6 +4,7 @@ import (
 	"context"
 	"etneca-logbook/driver"
 	"etneca-logbook/models"
+	"strings"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -30,22 +31,37 @@ func FindAllWorksheet() ([]models.WorkSheetRespond, error) {
 		err = cur.Decode(&worksheet)
 		worksheet.BoatName = worksheet.BoatDevice[0].Name
 		worksheet.Telephone = worksheet.TechDetail[0].Telephone
+		address := strings.SplitAfter(worksheet.TechDetail[0].Address, "จ.")
+		worksheet.StartDate = worksheet.Time.Format("2006-01-02")
+		worksheet.Address = address[1]
 		allWorkSheet = append(allWorkSheet, worksheet)
 	}
 	return allWorkSheet, nil
 }
 
-func FindWorksheet(id primitive.ObjectID) (models.Tech, error) {
+func FindWorksheet(id primitive.ObjectID) (models.WorkSheetRespond, error) {
+	var worksheet models.WorkSheetRespond
 	db, err := driver.ConnectMongoWorksheet()
-	var tech models.Tech
 	if err != nil {
-		return tech, err
+		return worksheet, err
 	}
-	err = db.FindOne(context.TODO(), bson.M{"_id": id}).Decode(&tech)
+	techState := bson.D{{"$lookup", bson.D{{"from", "tech"}, {"localField", "company"}, {"foreignField", "company"}, {"as", "techDetail"}}}}
+	boatState := bson.D{{"$lookup", bson.D{{"from", "boat"}, {"localField", "deviceNumber"}, {"foreignField", "deviceNumber"}, {"as", "boatDetail"}}}}
+	matchStage := bson.D{{"$match", bson.D{{"_id", id}}}}
+	cur, err := db.Aggregate(context.TODO(), mongo.Pipeline{techState, boatState, matchStage})
 	if err != nil {
-		return tech, err
+		return worksheet, err
 	}
-	return tech, nil
+	for cur.Next(context.Background()) {
+
+		err = cur.Decode(&worksheet)
+		worksheet.BoatName = worksheet.BoatDevice[0].Name
+		worksheet.Telephone = worksheet.TechDetail[0].Telephone
+		address := strings.SplitAfter(worksheet.TechDetail[0].Address, "จ.")
+		worksheet.StartDate = worksheet.Time.Format("2006-01-02")
+		worksheet.Address = address[1]
+	}
+	return worksheet, nil
 }
 
 func InsertWorksheet(workSheet models.WorkSheet) error {

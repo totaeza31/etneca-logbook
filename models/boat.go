@@ -36,7 +36,7 @@ type Boat struct {
 	WarrantyExp      string             `json:"warrantyExp,omitempty" bson:"warrantyExp,omitempty"`
 	ReportDate_date  time.Time          `json:"_" bson:"reportDatetime"`
 	ReportDate       string             `json:"reportDate,omitempty" bson:"reportDate,omitempty"`
-	Remark           []string           `json:"remark" bson:"remark"`
+	
 }
 
 type boatname struct {
@@ -62,3 +62,9 @@ type boatBeam struct {
 	Title string             `json:"title" bson:"title"`
 }
 
+type remarkBoat struct {
+	Detail    string    `json:"detail" bson:"detail"`
+	Time      time.Time `json:"_" bson:"time"`
+	FirstName string    `json:"firstname" bson:"firstname"`
+	LastName  string    `json:"lastname" bson:"lastname"`
+}
