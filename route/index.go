@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
-	"github.com/rs/cors"
 	"github.com/subosito/gotenv"
 )
 
@@ -36,12 +36,8 @@ func IndexRoute() {
 	test.AuthenRoute(router.PathPrefix("/test").Subrouter())
 	test.OwnerRoute(router.PathPrefix("/test").Subrouter())
 
-	cors := cors.New(cors.Options{
-		AllowedOrigins: []string{"*"},
-		AllowedMethods:   []string{http.MethodGet, http.MethodPost, http.MethodDelete, http.MethodPut, http.MethodPatch},
-		AllowCredentials: true,
-	})
-
-	handler := cors.Handler(router)
-	http.ListenAndServe(":"+os.Getenv("PORT"), handler)
+	headers := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"})
+	methods := handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "PATCH"})
+	origins := handlers.AllowedOrigins([]string{"*"})
+	http.ListenAndServe(":"+os.Getenv("PORT"), handlers.CORS(headers, methods, origins)(router))
 }
