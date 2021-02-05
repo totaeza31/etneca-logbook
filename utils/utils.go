@@ -62,6 +62,8 @@ func SentMessage(response http.ResponseWriter, message models.Constants) {
 		response.WriteHeader(http.StatusUnauthorized)
 	} else if message.Message.En == "token not found" {
 		response.WriteHeader(http.StatusNotFound)
+	} else if message.Message.En == "invalid token" {
+		response.WriteHeader(http.StatusForbidden)
 	}
 
 	json.NewEncoder(response).Encode(message)
@@ -83,10 +85,10 @@ func GenerateToken(authen models.Authen, types string) (string, error) {
 
 	if types == "access" {
 		secret = os.Getenv("ACCESS_TOKEN")
-		expires = time.Now().Add(time.Second * 10).Unix()
+		expires = time.Now().Add(time.Minute * 5).Unix()
 	} else if types == "refresh" {
 		secret = os.Getenv("REFRESH_TOKEN")
-		expires = time.Now().Add(time.Minute * 3).Unix()
+		expires = time.Now().Add(time.Minute * 15).Unix()
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
