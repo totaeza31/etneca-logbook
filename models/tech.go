@@ -12,7 +12,7 @@ type Tech struct {
 	Firstname string             `json:"firstname" bson:"firstname"`
 	Lastname  string             `json:"lastname" bson:"lastname"`
 	// Telephone []string           `json:"telephone" bson:"telephone"`
-	Address   string             `json:"address" bson:"address"`
-	Email     string             `json:"email" bson:"email"`
-	Remark    string             `json:"remark" bson:"remark"`
+	Address string `json:"address" bson:"address"`
+	Email   string `json:"email" bson:"email"`
+	Remark  string `json:"remark" bson:"remark"`
 }
