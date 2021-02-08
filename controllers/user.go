@@ -29,11 +29,10 @@ var token Token
 func Login(response http.ResponseWriter, request *http.Request) {
 
 	response.Header().Add("content-type", "application/json")
-	response.Header().Set("Access-Control-Allow-Origin", "*")
 	var authen models.Authen
 	err := json.NewDecoder(request.Body).Decode(&authen)
 	if err != nil || authen.Email == "" || authen.Password == "" {
-		respond = models.Invalid_syntax()
+		respond = models.Email_invalid()
 		utils.SentMessage(response, respond)
 	} else {
 		var password = authen.Password

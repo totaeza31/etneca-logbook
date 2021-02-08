@@ -33,6 +33,11 @@ func IndexRoute() {
 	v1.WorksheetRoute(router.PathPrefix("/v1").Subrouter())
 	v1.BoatRemarkRoute(router.PathPrefix("/v1").Subrouter())
 
+
+
+
+	
+
 	test.AuthenRoute(router.PathPrefix("/test").Subrouter())
 	test.OwnerRoute(router.PathPrefix("/test").Subrouter())
 
