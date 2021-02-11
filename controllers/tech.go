@@ -13,6 +13,7 @@ import (
 
 func GetTech(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
+	response.Header().Set("Access-Control-Allow-Origin", "*")
 	allTech, err := repository.FindAllTech()
 	if err != nil {
 		message := models.Get_data_error()
@@ -25,6 +26,7 @@ func GetTech(response http.ResponseWriter, request *http.Request) {
 
 func GetTechByID(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
+	response.Header().Set("Access-Control-Allow-Origin", "*")
 	param := mux.Vars(request)
 	id := param["id"]
 	objID, _ := primitive.ObjectIDFromHex(id)
@@ -39,6 +41,7 @@ func GetTechByID(response http.ResponseWriter, request *http.Request) {
 
 func PostTech(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
+	response.Header().Set("Access-Control-Allow-Origin", "*")
 	var tech models.Tech
 	err := json.NewDecoder(request.Body).Decode(&tech)
 	if err != nil {
@@ -60,6 +63,7 @@ func PostTech(response http.ResponseWriter, request *http.Request) {
 
 func PutTech(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
+	response.Header().Set("Access-Control-Allow-Origin", "*")
 	param := mux.Vars(request)
 	id := param["id"]
 	objID, _ := primitive.ObjectIDFromHex(id)
@@ -83,6 +87,7 @@ func PutTech(response http.ResponseWriter, request *http.Request) {
 
 func DelTech(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
+	response.Header().Set("Access-Control-Allow-Origin", "*")
 	param := mux.Vars(request)
 	id := param["id"]
 	objID, _ := primitive.ObjectIDFromHex(id)

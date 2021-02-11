@@ -183,6 +183,45 @@ func ConnectMongoBoatVgm() (*mongo.Collection, error) {
 	return collection, nil
 }
 
+func ConnectMongoCompany() (*mongo.Collection, error) {
+	clientOptions := options.Client().ApplyURI(os.Getenv("BO_DB"))
+	client, err := mongo.Connect(context.TODO(), clientOptions)
+
+	if err != nil {
+		return nil, err
+	}
+
+	collection := client.Database("back_office").Collection("company")
+
+	return collection, nil
+}
+
+func ConnectMongoPosition() (*mongo.Collection, error) {
+	clientOptions := options.Client().ApplyURI(os.Getenv("BO_DB"))
+	client, err := mongo.Connect(context.TODO(), clientOptions)
+
+	if err != nil {
+		return nil, err
+	}
+
+	collection := client.Database("back_office").Collection("position")
+
+	return collection, nil
+}
+
+func ConnectMongoEmp() (*mongo.Collection, error) {
+	clientOptions := options.Client().ApplyURI(os.Getenv("BO_DB"))
+	client, err := mongo.Connect(context.TODO(), clientOptions)
+
+	if err != nil {
+		return nil, err
+	}
+
+	collection := client.Database("back_office").Collection("employee")
+
+	return collection, nil
+}
+
 func ConnectMongoGoods() (*mongo.Collection, error) {
 	clientOptions := options.Client().ApplyURI(os.Getenv("BO_DB"))
 	client, err := mongo.Connect(context.TODO(), clientOptions)
@@ -205,6 +244,19 @@ func ConnectMongoWorksheet() (*mongo.Collection, error) {
 	}
 
 	collection := client.Database("back_office").Collection("worksheet")
+
+	return collection, nil
+}
+
+func ConnectMongoTitle() (*mongo.Collection, error) {
+	clientOptions := options.Client().ApplyURI(os.Getenv("BO_DB"))
+	client, err := mongo.Connect(context.TODO(), clientOptions)
+
+	if err != nil {
+		return nil, err
+	}
+
+	collection := client.Database("back_office").Collection("titlename")
 
 	return collection, nil
 }

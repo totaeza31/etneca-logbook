@@ -32,11 +32,10 @@ func IndexRoute() {
 	v1.GoodsRoute(router.PathPrefix("/v1").Subrouter())
 	v1.WorksheetRoute(router.PathPrefix("/v1").Subrouter())
 	v1.BoatRemarkRoute(router.PathPrefix("/v1").Subrouter())
-
-
-
-
-	
+	v1.EmployeeRoute(router.PathPrefix("/v1").Subrouter())
+	v1.CompanyRoute(router.PathPrefix("/v1").Subrouter())
+	v1.TitlenameRoute(router.PathPrefix("/v1").Subrouter())
+	v1.PositionRoute(router.PathPrefix("/v1").Subrouter())
 
 	test.AuthenRoute(router.PathPrefix("/test").Subrouter())
 	test.OwnerRoute(router.PathPrefix("/test").Subrouter())

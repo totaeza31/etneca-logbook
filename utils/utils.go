@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
@@ -165,6 +166,27 @@ func ParseEmail(Token string) (string, bool) {
 		}
 	}
 	return email, err
+}
+
+func GenerateEmpID(emp models.Employee) (string, error) {
+	var id string
+	com, _ := repository.FindCompany(emp.Company)
+
+	year := emp.StartDate.Format("06")
+	month := emp.StartDate.Format("01")
+	num, _ := repository.CountEmployee()
+	var text string
+	if num < 9 {
+		s := strconv.FormatInt(num+1, 10)
+		text = "00" + s
+	} else if num < 99 {
+		s := strconv.FormatInt(num+1, 10)
+		text = "0" + s
+	} else if num < 999 {
+		text = strconv.FormatInt(num+1, 10)
+	}
+	id = com.Acronym + year + month + text
+	return id, nil
 }
 
 func generatePath(text string) string {
