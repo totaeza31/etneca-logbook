@@ -6,39 +6,52 @@ import (
 	"etneca-logbook/models"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func FindAllEmployee() (models.AllEmp, error) {
-	var allEmp models.AllEmp
-	var emp models.Employee
-
+func FindAllEmployee() (models.AllGetEmployee, error) {
+	var allEmp models.AllGetEmployee
+	var employee models.GetEmployee
 	db, err := driver.ConnectMongoEmp()
-	if err != nil {
-		return allEmp, err
-	}
-	cur, err := db.Find(context.TODO(), bson.D{{}})
+	titleState := bson.D{{"$lookup", bson.D{{"from", "titlename"}, {"localField", "title"}, {"foreignField", "_id"}, {"as", "title"}}}}
+	positionState := bson.D{{"$lookup", bson.D{{"from", "position"}, {"localField", "position"}, {"foreignField", "_id"}, {"as", "position"}}}}
+	companyState := bson.D{{"$lookup", bson.D{{"from", "company"}, {"localField", "company"}, {"foreignField", "_id"}, {"as", "company"}}}}
+	genderState := bson.D{{"$lookup", bson.D{{"from", "gender"}, {"localField", "gender"}, {"foreignField", "_id"}, {"as", "gender"}}}}
+	cur, err := db.Aggregate(context.TODO(), mongo.Pipeline{titleState, positionState, companyState, genderState})
 	if err != nil {
 		return allEmp, err
 	}
 	for cur.Next(context.Background()) {
-		err = cur.Decode(&emp)
-
-		allEmp.Employee = append(allEmp.Employee, emp)
+		err = cur.Decode(&employee)
+		employee.TitleName = employee.Title[0]
+		employee.Com = employee.Company[0]
+		employee.Pst = employee.Position[0]
+		employee.Gd = employee.Gender[0]
+		allEmp.GetEmployee = append(allEmp.GetEmployee, employee)
 	}
 	return allEmp, nil
 }
 
-func FindEmployee(id string) (models.Employee, error) {
-	var emp models.Employee
+func FindEmployee(id string) (models.GetEmployee, error) {
+	var employee models.GetEmployee
 	db, err := driver.ConnectMongoEmp()
+	titleState := bson.D{{"$lookup", bson.D{{"from", "titlename"}, {"localField", "title"}, {"foreignField", "_id"}, {"as", "title"}}}}
+	positionState := bson.D{{"$lookup", bson.D{{"from", "position"}, {"localField", "position"}, {"foreignField", "_id"}, {"as", "position"}}}}
+	companyState := bson.D{{"$lookup", bson.D{{"from", "company"}, {"localField", "company"}, {"foreignField", "_id"}, {"as", "company"}}}}
+	genderState := bson.D{{"$lookup", bson.D{{"from", "gender"}, {"localField", "gender"}, {"foreignField", "_id"}, {"as", "gender"}}}}
+	matchStage := bson.D{{"$match", bson.D{{"_id", id}}}}
+	cur, err := db.Aggregate(context.TODO(), mongo.Pipeline{titleState, positionState, companyState, genderState, matchStage})
 	if err != nil {
-		return emp, err
+		return employee, err
 	}
-	err = db.FindOne(context.TODO(), bson.M{"_id": id}).Decode(&emp)
-	if err != nil {
-		return emp, err
+	for cur.Next(context.Background()) {
+		err = cur.Decode(&employee)
+		employee.TitleName = employee.Title[0]
+		employee.Com = employee.Company[0]
+		employee.Pst = employee.Position[0]
+		employee.Gd = employee.Gender[0]
 	}
-	return emp, nil
+	return employee, nil
 }
 
 func InsertEmployee(emp models.Employee) error {

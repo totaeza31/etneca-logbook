@@ -7,9 +7,9 @@ import (
 )
 
 func EmployeeRoute(router *mux.Router) {
-	router.HandleFunc("/emp", controllers.VerifyAccess(controllers.GetEmployees)).Methods("GET")
-	router.HandleFunc("/emp/{id}", controllers.VerifyAccess(controllers.GetEmployee)).Methods("GET")
-	router.HandleFunc("/emp", controllers.VerifyAccess(controllers.PostEmployee)).Methods("POST")
-	router.HandleFunc("/emp/{id}", controllers.VerifyAccess(controllers.PutEmployee)).Methods("PUT")
-	router.HandleFunc("/emp/{id}", controllers.VerifyAccess(controllers.DelEmployee)).Methods("DELETE")
+	router.HandleFunc("/emp", controllers.GetEmployees).Methods("GET")
+	router.HandleFunc("/emp/{id}", controllers.GetEmployee).Methods("GET")
+	router.HandleFunc("/emp", controllers.PostEmployee).Methods("POST")
+	router.HandleFunc("/emp/{id}", controllers.PutEmployee).Methods("PUT")
+	router.HandleFunc("/emp/{id}", controllers.DelEmployee).Methods("DELETE")
 }

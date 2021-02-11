@@ -20,7 +20,7 @@ func GetEmployees(response http.ResponseWriter, request *http.Request) {
 		message := models.Get_data_error()
 		utils.SentMessage(response, message)
 	} else {
-		json.NewEncoder(response).Encode(employee.Employee)
+		json.NewEncoder(response).Encode(employee.GetEmployee)
 	}
 }
 

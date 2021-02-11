@@ -196,6 +196,19 @@ func ConnectMongoCompany() (*mongo.Collection, error) {
 	return collection, nil
 }
 
+func ConnectMongoGender() (*mongo.Collection, error) {
+	clientOptions := options.Client().ApplyURI(os.Getenv("BO_DB"))
+	client, err := mongo.Connect(context.TODO(), clientOptions)
+
+	if err != nil {
+		return nil, err
+	}
+
+	collection := client.Database("back_office").Collection("gender")
+
+	return collection, nil
+}
+
 func ConnectMongoPosition() (*mongo.Collection, error) {
 	clientOptions := options.Client().ApplyURI(os.Getenv("BO_DB"))
 	client, err := mongo.Connect(context.TODO(), clientOptions)
