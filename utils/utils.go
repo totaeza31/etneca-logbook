@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
@@ -170,22 +171,27 @@ func ParseEmail(Token string) (string, bool) {
 
 func GenerateEmpID(emp models.Employee) (string, error) {
 	var id string
-	com, _ := repository.FindCompany(emp.Company)
 
+	com, _ := repository.FindCompany(emp.Company)
 	year := emp.StartDate.Format("06")
 	month := emp.StartDate.Format("01")
-	num, _ := repository.CountEmployee()
-	var text string
+	e, _ := repository.LastEmployee()
+
+	splitID := strings.SplitAfter(e.ID, "")
+	lastID := splitID[6] + splitID[7] + splitID[8]
+	num, _ := strconv.Atoi(lastID)
+
 	if num < 9 {
-		s := strconv.FormatInt(num+1, 10)
-		text = "00" + s
+		s := strconv.Itoa(num + 1)
+		lastID = "00" + s
 	} else if num < 99 {
-		s := strconv.FormatInt(num+1, 10)
-		text = "0" + s
+		s := strconv.Itoa(num + 1)
+		lastID = "0" + s
 	} else if num < 999 {
-		text = strconv.FormatInt(num+1, 10)
+		lastID = strconv.Itoa(num + 1)
 	}
-	id = com.Acronym + year + month + text
+	id = com.Acronym + year + month + lastID
+
 	return id, nil
 }
 

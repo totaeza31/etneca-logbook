@@ -7,6 +7,7 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func FindAllEmployee() (models.AllGetEmployee, error) {
@@ -92,11 +93,13 @@ func DeleteEmployee(id string) error {
 	return err
 }
 
-func CountEmployee() (int64, error) {
+func LastEmployee() (models.Employee, error) {
 	db, err := driver.ConnectMongoEmp()
-	doc, err := db.CountDocuments(context.TODO(), bson.D{{}})
+	var emp models.Employee
+	opts := options.FindOne().SetSort(bson.D{{"_id", -1}})
+	err = db.FindOne(context.TODO(), bson.M{}, opts).Decode(&emp)
 	if err != nil {
-		return doc, err
+		return emp, err
 	}
-	return doc, nil
+	return emp, nil
 }
