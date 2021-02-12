@@ -30,7 +30,7 @@ type Employee struct {
 	Password      string             `json:"password" bson:"password"`
 	Position      primitive.ObjectID `json:"position" bson:"position"`
 	Company       primitive.ObjectID `json:"company" bson:"company"`
-	Title         primitive.ObjectID `json:"emrTitle" bson:"emrTitle"`
+	EmrTitle         primitive.ObjectID `json:"emrTitle" bson:"emrTitle"`
 	EmrFirstname  string             `json:"emrFirstname" bson:"emrFirstname"`
 	EmrLastname   string             `json:"emrLastname" bson:"emrLastname"`
 	EmrPhoneNo    string             `json:"emrPhone" bson:"emrPhone"`
