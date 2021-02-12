@@ -46,9 +46,9 @@ func PostEmployee(response http.ResponseWriter, request *http.Request) {
 		emp.Password = utils.Encrypt(emp.Password)
 		id, _ := utils.GenerateEmpID(emp)
 		emp.ID = id
-		utils.TimeFormat(emp.Birthday)
-		
-		// err = repository.InsertEmployee(emp)
+		// utils.TimeFormat(emp.Birthday)
+
+		err = repository.InsertEmployee(emp)
 		if err != nil {
 			message := models.Update_error()
 			utils.SentMessage(response, message)

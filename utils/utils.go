@@ -195,7 +195,7 @@ func GenerateEmpID(emp models.Employee) (string, error) {
 	return id, nil
 }
 
-func TimeFormat(time string)  {
+func TimeFormat(time string) {
 	split := strings.SplitAfter(time, " ")
 	fmt.Println(split)
 }
