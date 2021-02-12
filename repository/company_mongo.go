@@ -13,7 +13,7 @@ func FindAllCompany() (models.AllCompany, error) {
 	var allcomp models.AllCompany
 	var comp models.Company
 
-	db, client, err := driver.ConnectMongoEmp()
+	db, client, err := driver.ConnectMongoCompany()
 	if err != nil {
 		return allcomp, err
 	}
@@ -36,7 +36,7 @@ func FindAllCompany() (models.AllCompany, error) {
 
 func FindCompany(id primitive.ObjectID) (models.Company, error) {
 	var comp models.Company
-	db, client, err := driver.ConnectMongoEmp()
+	db, client, err := driver.ConnectMongoCompany()
 	if err != nil {
 		return comp, err
 	}
