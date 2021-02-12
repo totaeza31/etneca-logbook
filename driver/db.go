@@ -66,17 +66,17 @@ func ConnectMongoReport() (*mongo.Collection, error) {
 	return collection, nil
 }
 
-func ConnectMongoTech() (*mongo.Collection, error) {
+func ConnectMongoTech() (*mongo.Collection, *mongo.Client, error) {
 	clientOptions := options.Client().ApplyURI(os.Getenv("BO_DB"))
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 
 	if err != nil {
-		return nil, err
+		return nil, nil,err
 	}
 
 	collection := client.Database("back_office").Collection("tech")
 
-	return collection, nil
+	return collection,client, nil
 }
 
 func ConnectMongoHuman() (*mongo.Collection, error) {

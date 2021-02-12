@@ -13,7 +13,7 @@ func FindAllTech() (models.AllTech, error) {
 	var allTech models.AllTech
 	var tech models.Tech
 
-	db, err := driver.ConnectMongoTech()
+	db, client, err := driver.ConnectMongoTech()
 	if err != nil {
 		return allTech, err
 	}
@@ -25,11 +25,16 @@ func FindAllTech() (models.AllTech, error) {
 		err = cur.Decode(&tech)
 		allTech.Tech = append(allTech.Tech, tech)
 	}
+	err = client.Disconnect(context.Background())
+
+	if err != nil {
+		return allTech, err
+	}
 	return allTech, nil
 }
 
 func FindTech(id primitive.ObjectID) (models.Tech, error) {
-	db, err := driver.ConnectMongoTech()
+	db, client, err := driver.ConnectMongoTech()
 	var tech models.Tech
 	if err != nil {
 		return tech, err
@@ -38,11 +43,16 @@ func FindTech(id primitive.ObjectID) (models.Tech, error) {
 	if err != nil {
 		return tech, err
 	}
+	err = client.Disconnect(context.Background())
+
+	if err != nil {
+		return tech, err
+	}
 	return tech, nil
 }
 
 func FindTechName(company string) (models.Tech, error) {
-	db, err := driver.ConnectMongoTech()
+	db, client, err := driver.ConnectMongoTech()
 	var tech models.Tech
 	if err != nil {
 		return tech, err
@@ -51,11 +61,16 @@ func FindTechName(company string) (models.Tech, error) {
 	if err != nil {
 		return tech, err
 	}
+	err = client.Disconnect(context.Background())
+
+	if err != nil {
+		return tech, err
+	}
 	return tech, nil
 }
 
 func InsertTech(tech models.Tech) error {
-	collection, err := driver.ConnectMongoTech()
+	collection, client, err := driver.ConnectMongoTech()
 	if err != nil {
 		return err
 	}
@@ -63,11 +78,16 @@ func InsertTech(tech models.Tech) error {
 	if err != nil {
 		return err
 	}
+	err = client.Disconnect(context.Background())
+
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
 func UpdateTech(tech models.Tech, id primitive.ObjectID) error {
-	db, err := driver.ConnectMongoTech()
+	db, client, err := driver.ConnectMongoTech()
 	filter := bson.D{{"_id", id}}
 	update := bson.D{{"$set", tech}}
 	_, err = db.UpdateOne(
@@ -75,16 +95,27 @@ func UpdateTech(tech models.Tech, id primitive.ObjectID) error {
 		filter,
 		update,
 	)
+
 	if err != nil {
 		return err
 	} else {
+		err = client.Disconnect(context.Background())
+
+		if err != nil {
+			return err
+		}
 		return nil
 	}
 }
 
 func DeleteTech(id primitive.ObjectID) error {
-	db, err := driver.ConnectMongoTech()
+	db, client, err := driver.ConnectMongoTech()
 	_, err = db.DeleteOne(context.TODO(), bson.M{"_id": id})
+	if err != nil {
+		return err
+	}
+	err = client.Disconnect(context.Background())
+
 	if err != nil {
 		return err
 	}
