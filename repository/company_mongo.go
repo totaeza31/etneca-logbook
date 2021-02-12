@@ -6,13 +6,14 @@ import (
 	"etneca-logbook/models"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func FindAllCompany() (models.AllCompany, error) {
 	var allcomp models.AllCompany
 	var comp models.Company
 
-	db, client, err := driver.ConnectMongoCompany()
+	db, client, err := driver.ConnectMongoEmp()
 	if err != nil {
 		return allcomp, err
 	}
@@ -31,4 +32,22 @@ func FindAllCompany() (models.AllCompany, error) {
 		return allcomp, err
 	}
 	return allcomp, nil
+}
+
+func FindCompany(id primitive.ObjectID) (models.Company, error) {
+	var comp models.Company
+	db, client, err := driver.ConnectMongoEmp()
+	if err != nil {
+		return comp, err
+	}
+	err = db.FindOne(context.TODO(), bson.M{"_id": id}).Decode(&comp)
+	if err != nil {
+		return comp, err
+	}
+	err = client.Disconnect(context.Background())
+
+	if err != nil {
+		return comp, err
+	}
+	return comp, nil
 }
