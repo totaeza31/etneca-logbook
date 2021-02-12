@@ -18,7 +18,7 @@ type Employee struct {
 	Gender       primitive.ObjectID `json:"gender" bson:"gender"`
 	IdCard       string             `json:"idCard" bson:"idCard"`
 	Nation       string             `json:"nation" bson:"nation"`
-	Birthday     string          `json:"birthday" bson:"birthday"`
+	Birthday     string             `json:"birthday" bson:"birthday"`
 	Address      string             `json:"address" bson:"address"`
 	Phone        string             `json:"phone" bson:"phoneNo"`
 	StartDate    time.Time          `json:"startDate" bson:"startDate"`

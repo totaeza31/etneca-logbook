@@ -11,7 +11,7 @@ import (
 
 func FindUser(id primitive.ObjectID) (models.User, error) {
 	var user models.User
-	db, err := driver.ConnectMongoProfile()
+	db, client, err := driver.ConnectMongoProfile()
 	if err != nil {
 		return user, err
 	}
@@ -19,16 +19,26 @@ func FindUser(id primitive.ObjectID) (models.User, error) {
 	if err != nil {
 		return user, err
 	}
+	err = client.Disconnect(context.Background())
+
+	if err != nil {
+		return user,err
+	}
 	return user, nil
 }
 
 func FindAuthen(id primitive.ObjectID) (models.Authen, error) {
 	var authen models.Authen
-	db, err := driver.ConnectMongoProfile()
+	db, client, err := driver.ConnectMongoProfile()
 	if err != nil {
 		return authen, err
 	}
 	err = db.FindOne(context.TODO(), bson.M{"_id": id}).Decode(&authen)
+	if err != nil {
+		return authen, err
+	}
+	err = client.Disconnect(context.Background())
+
 	if err != nil {
 		return authen, err
 	}
@@ -37,7 +47,7 @@ func FindAuthen(id primitive.ObjectID) (models.Authen, error) {
 
 func FindEmail(email string) (models.Authen, error) {
 	var authen models.Authen
-	db, err := driver.ConnectMongoProfile()
+	db, client, err := driver.ConnectMongoProfile()
 	if err != nil {
 		return authen, err
 	}
@@ -45,11 +55,16 @@ func FindEmail(email string) (models.Authen, error) {
 	if err != nil {
 		return authen, err
 	}
+	err = client.Disconnect(context.Background())
+
+	if err != nil {
+		return authen, err
+	}
 	return authen, nil
 }
 
 func UpdatePassword(password string, email string) error {
-	db, err := driver.ConnectMongoProfile()
+	db, client, err := driver.ConnectMongoProfile()
 	filter := bson.D{{"email", email}}
 
 	update := bson.D{{"$set",
@@ -65,13 +80,23 @@ func UpdatePassword(password string, email string) error {
 	if err != nil {
 		return err
 	}
+	err = client.Disconnect(context.Background())
+
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
 
 func DeleteUser(id primitive.ObjectID) error {
-	db, err := driver.ConnectMongoProfile()
+	db, client, err := driver.ConnectMongoProfile()
 	_, err = db.DeleteOne(context.TODO(), bson.M{"_id": id})
+	if err != nil {
+		return err
+	}
+	err = client.Disconnect(context.Background())
+
 	if err != nil {
 		return err
 	}
@@ -79,7 +104,7 @@ func DeleteUser(id primitive.ObjectID) error {
 }
 
 func UpdateUser(user models.User, id primitive.ObjectID) error {
-	db, err := driver.ConnectMongoProfile()
+	db, client, err := driver.ConnectMongoProfile()
 	filter := bson.D{{"_id", id}}
 	update := bson.D{{"$set", user}}
 	_, err = db.UpdateOne(
@@ -87,6 +112,11 @@ func UpdateUser(user models.User, id primitive.ObjectID) error {
 		filter,
 		update,
 	)
+	if err != nil {
+		return err
+	}
+	err = client.Disconnect(context.Background())
+
 	if err != nil {
 		return err
 	}
@@ -98,7 +128,7 @@ func GetPackageAllPackage() (models.Data, error) {
 	var data models.Data
 	var packages models.Package
 
-	db, err := driver.ConnectMongoPackage()
+	db, client, err := driver.ConnectMongoPackage()
 	if err != nil {
 		return data, err
 	}
@@ -111,6 +141,11 @@ func GetPackageAllPackage() (models.Data, error) {
 		err = cur.Decode(&packages)
 		data.Package = append(data.Package, packages)
 
+	}
+	err = client.Disconnect(context.Background())
+
+	if err != nil {
+		return data, err
 	}
 
 	return data, nil

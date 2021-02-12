@@ -14,30 +14,30 @@ func init() {
 	gotenv.Load()
 }
 
-func ConnectMongoProfile() (*mongo.Collection, error) {
+func ConnectMongoProfile() (*mongo.Collection, *mongo.Client, error) {
 	clientOptions := options.Client().ApplyURI(os.Getenv("USER_DB"))
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	collection := client.Database("User").Collection("profile")
 
-	return collection, nil
+	return collection, client, nil
 }
 
-func ConnectMongoPackage() (*mongo.Collection, error) {
+func ConnectMongoPackage() (*mongo.Collection, *mongo.Client, error) {
 	clientOptions := options.Client().ApplyURI(os.Getenv("USER_DB"))
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	collection := client.Database("User").Collection("package")
 
-	return collection, nil
+	return collection, client, nil
 }
 
 func ConnectMongoBO() (*mongo.Collection, error) {
