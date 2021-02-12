@@ -195,6 +195,11 @@ func GenerateEmpID(emp models.Employee) (string, error) {
 	return id, nil
 }
 
+func TimeFormat(time string)  {
+	split := strings.SplitAfter(time, " ")
+	fmt.Println(split)
+}
+
 func generatePath(text string) string {
 	key := os.Getenv("KEY_CRYPTO")
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{

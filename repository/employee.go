@@ -13,7 +13,7 @@ import (
 func FindAllEmployee() (models.AllGetEmployee, error) {
 	var allEmp models.AllGetEmployee
 	var employee models.GetEmployee
-	db, err := driver.ConnectMongoEmp()
+	db, client, err := driver.ConnectMongoEmp()
 	titleState := bson.D{{"$lookup", bson.D{{"from", "titlename"}, {"localField", "title"}, {"foreignField", "_id"}, {"as", "title"}}}}
 	positionState := bson.D{{"$lookup", bson.D{{"from", "position"}, {"localField", "position"}, {"foreignField", "_id"}, {"as", "position"}}}}
 	companyState := bson.D{{"$lookup", bson.D{{"from", "company"}, {"localField", "company"}, {"foreignField", "_id"}, {"as", "company"}}}}
@@ -30,12 +30,18 @@ func FindAllEmployee() (models.AllGetEmployee, error) {
 		employee.Gd = employee.Gender[0]
 		allEmp.GetEmployee = append(allEmp.GetEmployee, employee)
 	}
+	err = client.Disconnect(context.Background())
+
+	if err != nil {
+		return allEmp, err
+	}
+
 	return allEmp, nil
 }
 
 func FindEmployee(id string) (models.GetEmployee, error) {
 	var employee models.GetEmployee
-	db, err := driver.ConnectMongoEmp()
+	db, client, err := driver.ConnectMongoEmp()
 	titleState := bson.D{{"$lookup", bson.D{{"from", "titlename"}, {"localField", "title"}, {"foreignField", "_id"}, {"as", "title"}}}}
 	positionState := bson.D{{"$lookup", bson.D{{"from", "position"}, {"localField", "position"}, {"foreignField", "_id"}, {"as", "position"}}}}
 	companyState := bson.D{{"$lookup", bson.D{{"from", "company"}, {"localField", "company"}, {"foreignField", "_id"}, {"as", "company"}}}}
@@ -52,15 +58,27 @@ func FindEmployee(id string) (models.GetEmployee, error) {
 		employee.Pst = employee.Position[0]
 		employee.Gd = employee.Gender[0]
 	}
+	err = client.Disconnect(context.Background())
+
+	if err != nil {
+		return employee, err
+	}
 	return employee, nil
 }
 
 func InsertEmployee(emp models.Employee) error {
-	collection, err := driver.ConnectMongoEmp()
+	db, client, err := driver.ConnectMongoEmp()
 	if err != nil {
 		return err
 	}
-	_, err = collection.InsertOne(context.Background(), emp)
+
+	_, err = db.InsertOne(context.Background(), emp)
+	if err != nil {
+		return err
+	}
+
+	err = client.Disconnect(context.Background())
+
 	if err != nil {
 		return err
 	}
@@ -68,7 +86,7 @@ func InsertEmployee(emp models.Employee) error {
 }
 
 func UpdateEmployee(emp models.Employee, id string) error {
-	db, err := driver.ConnectMongoEmp()
+	db, client, err := driver.ConnectMongoEmp()
 	filter := bson.D{{"_id", id}}
 	update := bson.D{{"$set", emp}}
 	db.CountDocuments(context.TODO(), bson.D{{}})
@@ -80,13 +98,23 @@ func UpdateEmployee(emp models.Employee, id string) error {
 	if err != nil {
 		return err
 	}
+	err = client.Disconnect(context.Background())
+
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
 
 func DeleteEmployee(id string) error {
-	db, err := driver.ConnectMongoEmp()
+	db, client, err := driver.ConnectMongoEmp()
 	_, err = db.DeleteOne(context.TODO(), bson.M{"_id": id})
+	if err != nil {
+		return err
+	}
+	err = client.Disconnect(context.Background())
+
 	if err != nil {
 		return err
 	}
@@ -94,10 +122,15 @@ func DeleteEmployee(id string) error {
 }
 
 func LastEmployee() (models.Employee, error) {
-	db, err := driver.ConnectMongoEmp()
+	db, client, err := driver.ConnectMongoEmp()
 	var emp models.Employee
 	opts := options.FindOne().SetSort(bson.D{{"_id", -1}})
 	err = db.FindOne(context.TODO(), bson.M{}, opts).Decode(&emp)
+	if err != nil {
+		return emp, err
+	}
+	err = client.Disconnect(context.Background())
+
 	if err != nil {
 		return emp, err
 	}

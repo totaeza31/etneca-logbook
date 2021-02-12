@@ -12,7 +12,7 @@ func FindAllGender() (models.AllGender, error) {
 	var allGender models.AllGender
 	var gender models.Gender
 
-	db, err := driver.ConnectMongoGender()
+	db, client, err := driver.ConnectMongoGender()
 	if err != nil {
 		return allGender, err
 	}
@@ -24,6 +24,11 @@ func FindAllGender() (models.AllGender, error) {
 		err = cur.Decode(&gender)
 
 		allGender.Gender = append(allGender.Gender, gender)
+	}
+	err = client.Disconnect(context.Background())
+
+	if err != nil {
+		return allGender, err
 	}
 	return allGender, nil
 }

@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"etneca-logbook/models"
 	"etneca-logbook/repository"
@@ -15,7 +14,6 @@ import (
 func GetEmployees(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 	employee, err := repository.FindAllEmployee()
-
 	if err != nil {
 		message := models.Get_data_error()
 		utils.SentMessage(response, message)
@@ -42,14 +40,15 @@ func PostEmployee(response http.ResponseWriter, request *http.Request) {
 	var emp models.Employee
 	err := json.NewDecoder(request.Body).Decode(&emp)
 	if err != nil {
-		fmt.Println(err)
 		message := models.Invalid_syntax()
 		utils.SentMessage(response, message)
 	} else {
 		emp.Password = utils.Encrypt(emp.Password)
 		id, _ := utils.GenerateEmpID(emp)
 		emp.ID = id
-		err = repository.InsertEmployee(emp)
+		utils.TimeFormat(emp.Birthday)
+		
+		// err = repository.InsertEmployee(emp)
 		if err != nil {
 			message := models.Update_error()
 			utils.SentMessage(response, message)

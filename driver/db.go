@@ -183,56 +183,56 @@ func ConnectMongoBoatVgm() (*mongo.Collection, error) {
 	return collection, nil
 }
 
-func ConnectMongoCompany() (*mongo.Collection, error) {
+func ConnectMongoCompany() (*mongo.Collection, *mongo.Client, error) {
 	clientOptions := options.Client().ApplyURI(os.Getenv("BO_DB"))
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	collection := client.Database("back_office").Collection("company")
 
-	return collection, nil
+	return collection, client, nil
 }
 
-func ConnectMongoGender() (*mongo.Collection, error) {
+func ConnectMongoGender() (*mongo.Collection, *mongo.Client, error) {
 	clientOptions := options.Client().ApplyURI(os.Getenv("BO_DB"))
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	collection := client.Database("back_office").Collection("gender")
 
-	return collection, nil
+	return collection, client, nil
 }
 
-func ConnectMongoPosition() (*mongo.Collection, error) {
+func ConnectMongoPosition() (*mongo.Collection, *mongo.Client, error) {
 	clientOptions := options.Client().ApplyURI(os.Getenv("BO_DB"))
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	collection := client.Database("back_office").Collection("position")
 
-	return collection, nil
+	return collection, client, nil
 }
 
-func ConnectMongoEmp() (*mongo.Collection, error) {
+func ConnectMongoEmp() (*mongo.Collection, *mongo.Client, error) {
 	clientOptions := options.Client().ApplyURI(os.Getenv("BO_DB"))
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	collection := client.Database("back_office").Collection("employee")
 
-	return collection, nil
+	return collection, client, nil
 }
 
 func ConnectMongoGoods() (*mongo.Collection, error) {
@@ -261,17 +261,17 @@ func ConnectMongoWorksheet() (*mongo.Collection, error) {
 	return collection, nil
 }
 
-func ConnectMongoTitle() (*mongo.Collection, error) {
+func ConnectMongoTitle() (*mongo.Collection, *mongo.Client, error) {
 	clientOptions := options.Client().ApplyURI(os.Getenv("BO_DB"))
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	collection := client.Database("back_office").Collection("titlename")
 
-	return collection, nil
+	return collection, client, nil
 }
 
 func ConnectRedis() (*redis.Client, error) {
