@@ -44,10 +44,13 @@ func PostEmployee(response http.ResponseWriter, request *http.Request) {
 		utils.SentMessage(response, message)
 	} else {
 		emp.Password = utils.Encrypt(emp.Password)
+
+		emp.BirthdayTime = utils.TimeFormat(emp.Birthday)
+		emp.StartDateTime = utils.TimeFormat(emp.StartDate)
+		emp.EndDateTime = utils.TimeFormat(emp.EndDate)
+		emp.EnsureDateTime = utils.TimeFormat(emp.EnsureDate)
 		id, _ := utils.GenerateEmpID(emp)
 		emp.ID = id
-		// utils.TimeFormat(emp.Birthday)
-
 		err = repository.InsertEmployee(emp)
 		if err != nil {
 			message := models.Update_error()
@@ -71,6 +74,7 @@ func PutEmployee(response http.ResponseWriter, request *http.Request) {
 		var emp models.Employee
 		json.NewDecoder(request.Body).Decode(&emp)
 		emp.Password = utils.Encrypt(emp.Password)
+
 		err = repository.UpdateEmployee(emp, id)
 		if err != nil {
 			message := models.Edit_error()

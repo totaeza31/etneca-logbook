@@ -173,8 +173,8 @@ func GenerateEmpID(emp models.Employee) (string, error) {
 	var id string
 
 	com, _ := repository.FindCompany(emp.Company)
-	year := emp.StartDate.Format("06")
-	month := emp.StartDate.Format("01")
+	year := emp.StartDateTime.Format("06")
+	month := emp.StartDateTime.Format("01")
 	e, _ := repository.LastEmployee()
 
 	splitID := strings.SplitAfter(e.ID, "")
@@ -195,9 +195,37 @@ func GenerateEmpID(emp models.Employee) (string, error) {
 	return id, nil
 }
 
-func TimeFormat(time string) {
-	split := strings.SplitAfter(time, " ")
-	fmt.Println(split)
+func TimeFormat(timeString string) time.Time {
+	split := strings.Split(timeString, " ")
+	if split[1] == "Jan" {
+		split[1] = "01"
+	} else if split[1] == "Feb" {
+		split[1] = "02"
+	} else if split[1] == "Mar" {
+		split[1] = "03"
+	} else if split[1] == "Apr" {
+		split[1] = "04"
+	} else if split[1] == "May" {
+		split[1] = "05"
+	} else if split[1] == "Jun" {
+		split[1] = "06"
+	} else if split[1] == "Jul" {
+		split[1] = "07"
+	} else if split[1] == "Aug" {
+		split[1] = "08"
+	} else if split[1] == "Sep" {
+		split[1] = "09"
+	} else if split[1] == "Oct" {
+		split[1] = "10"
+	} else if split[1] == "Nov" {
+		split[1] = "11"
+	} else if split[1] == "Dec" {
+		split[1] = "12"
+	}
+
+	timeString = split[3] + "-" + split[1] + "-" + split[2] + "T" + split[4] + ".000Z"
+	timeTime, _ := time.Parse("2006-01-02T15:04:05.000Z", timeString)
+	return timeTime
 }
 
 func generatePath(text string) string {
