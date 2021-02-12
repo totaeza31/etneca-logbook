@@ -2,6 +2,8 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
+	"time"
 
 	"etneca-logbook/models"
 	"etneca-logbook/repository"
@@ -40,17 +42,21 @@ func PostEmployee(response http.ResponseWriter, request *http.Request) {
 	var emp models.Employee
 	err := json.NewDecoder(request.Body).Decode(&emp)
 	if err != nil {
+		fmt.Println(err)
 		message := models.Invalid_syntax()
 		utils.SentMessage(response, message)
 	} else {
 		emp.Password = utils.Encrypt(emp.Password)
-
-		emp.BirthdayTime = utils.TimeFormat(emp.Birthday)
-		emp.StartDateTime = utils.TimeFormat(emp.StartDate)
-		emp.EndDateTime = utils.TimeFormat(emp.EndDate)
-		emp.EnsureDateTime = utils.TimeFormat(emp.EnsureDate)
-		id, _ := utils.GenerateEmpID(emp)
-		emp.ID = id
+		emp.BirthdayTime, _ = time.Parse("2006-01-02T15:04:05.000Z", emp.Birthday)
+		emp.StartDateTime, _ = time.Parse("2006-01-02T15:04:05.000Z", emp.StartDate)
+		emp.EndDateTime, _ = time.Parse("2006-01-02T15:04:05.000Z", emp.EndDate)
+		emp.EnsureDateTime, _ = time.Parse("2006-01-02T15:04:05.000Z", emp.EnsureDate)
+		// emp.BirthdayTime = utils.TimeFormat(emp.Birthday)
+		// emp.StartDateTime = utils.TimeFormat(emp.StartDate)
+		// emp.EndDateTime = utils.TimeFormat(emp.EndDate)
+		// emp.EnsureDateTime = utils.TimeFormat(emp.EnsureDate)
+		// id, _ := utils.GenerateEmpID(emp)
+		// emp.ID = id
 		err = repository.InsertEmployee(emp)
 		if err != nil {
 			message := models.Update_error()

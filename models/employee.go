@@ -21,7 +21,7 @@ type Employee struct {
 	Birthday      string             `json:"birthday" bson:"-"`
 	BirthdayTime  time.Time          `json:"-" bson:"birthday"`
 	Address       string             `json:"address" bson:"address"`
-	Phone         string             `json:"phone" bson:"phoneNo"`
+	Phone         string             `json:"phoneNo" bson:"phoneNo"`
 	StartDate     string             `json:"startDate" bson:"-"`
 	StartDateTime time.Time          `json:"-" bson:"startDate"`
 	EndDate       string             `json:"endDate" bson:"-"`
@@ -30,7 +30,7 @@ type Employee struct {
 	Password      string             `json:"password" bson:"password"`
 	Position      primitive.ObjectID `json:"position" bson:"position"`
 	Company       primitive.ObjectID `json:"company" bson:"company"`
-	EmrTitle         primitive.ObjectID `json:"emrTitle" bson:"emrTitle"`
+	EmrTitle      primitive.ObjectID `json:"emrTitle" bson:"emrTitle"`
 	EmrFirstname  string             `json:"emrFirstname" bson:"emrFirstname"`
 	EmrLastname   string             `json:"emrLastname" bson:"emrLastname"`
 	EmrPhoneNo    string             `json:"emrPhone" bson:"emrPhone"`
@@ -98,7 +98,8 @@ type GetEmployee struct {
 	Pst          Position   `json:"pstDetail" bson:"pstDetail"`
 	Company      []Company  `json:"-" bson:"company"`
 	Com          Company    `json:"compDetail" bson:"compDetail"`
-	EmrFirstname string     `json:"emrFirstname" bson:"emrFirstname"`
+	EmrTiltle    string     `json:"emrFirstname" bson:"emrFirstname"`
+	EmrFirstname []Title    `json:"-" bson:"title"`
 	EmrLastname  string     `json:"emrLastname" bson:"emrLastname"`
 	EmrPhoneNo   string     `json:"emrPhone" bson:"emrPhone"`
 	EmrRelate    string     `json:"emrRelate" bson:"emrRelate"`
